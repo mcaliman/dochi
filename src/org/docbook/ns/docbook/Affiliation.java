@@ -4,7 +4,7 @@
 // Qualsiasi modifica a questo file andrà persa durante la ricompilazione dello schema di origine. 
 // Generato il: 2016.09.12 alle 10:18:45 PM CEST 
 //
-
+//
 
 package org.docbook.ns.docbook;
 
