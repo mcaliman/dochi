@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+    <system systemId="file:/home/mcaliman/NetBeansProjects/dochi/docbook5/docbook.xsd" uri="xml-resources/jaxb/DocBook5/docbook.xsd"/>
+    <system systemId="file:/home/mcaliman/NetBeansProjects/dochi/docbook5/xlink.xsd" uri="xml-resources/jaxb/DocBook5/xlink.xsd"/>
+    <system systemId="file:/home/mcaliman/NetBeansProjects/dochi/docbook5/xml.xsd" uri="xml-resources/jaxb/DocBook5/xml.xsd"/>
+</catalog>
