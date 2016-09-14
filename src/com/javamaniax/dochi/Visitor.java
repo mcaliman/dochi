@@ -34,6 +34,7 @@ import javax.xml.bind.Unmarshaller;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
+import org.docbook.ns.docbook.Article;
 import org.docbook.ns.docbook.Book;
 import org.docbook.ns.docbook.Chapter;
 import org.docbook.ns.docbook.Para;
@@ -123,6 +124,13 @@ public class Visitor implements VisitorInterface {
     }
 
     @Override
+    public void visit(Article article) {
+        //TODO
+        article.getTitlesAndTitleabbrevsAndSubtitles();
+        article.getGlossariesAndBibliographiesAndIndices();
+    }
+    
+    @Override
     public void visit(Book book) {
         String actuate = book.getActuate();
         String annotations = book.getAnnotations();
@@ -172,7 +180,7 @@ public class Visitor implements VisitorInterface {
     }
 
     @Override
-    public Book visit(File file) {
+    public Book visitBookFile(File file) {
         Book book = new Book();
         try {
             JAXBContext jaxbCtx = JAXBContext.newInstance(book.getClass());
@@ -185,5 +193,22 @@ public class Visitor implements VisitorInterface {
         }
         return book;
     }
+
+    @Override
+    public Article visitArticleFile(File file) {
+        Article article = new Article();
+        try {
+            JAXBContext jaxbCtx = JAXBContext.newInstance(article.getClass());
+            Unmarshaller unmarshaller = jaxbCtx.createUnmarshaller();
+            Source source = new StreamSource(file);
+            article = (Article) unmarshaller.unmarshal(source);
+            visit(article);
+        } catch (JAXBException ex) {
+            logger.log(Level.SEVERE, null, ex);
+        }
+        return article;
+    }
+
+    
 
 }

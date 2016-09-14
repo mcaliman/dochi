@@ -25,6 +25,7 @@ package com.javamaniax.dochi;
 
 import java.io.File;
 import java.util.List;
+import org.docbook.ns.docbook.Article;
 import org.docbook.ns.docbook.Book;
 import org.docbook.ns.docbook.Chapter;
 import org.docbook.ns.docbook.Para;
@@ -38,16 +39,19 @@ import org.docbook.ns.docbook.Title;
 public interface VisitorInterface {
 
     public void visit(String content);
-
+    
     public void visit(Title title);
 
     public void visit(Para para);
 
     public void visit(Chapter chapter);
 
+    public void visit(Article article);
+    
     public void visit(Book book);
 
-    public Book visit(File file);
+    public Book visitBookFile(File file);
+    public Article visitArticleFile(File file);
 
     public void visitGlossariesAndBibliographiesAndIndices(Object object);
 
