@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
-package com.javamaniax.docbook5;
+package com.javamaniax.dochi;
 
 import java.io.File;
 import java.util.List;

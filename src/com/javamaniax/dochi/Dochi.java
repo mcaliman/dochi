@@ -23,8 +23,6 @@
  */
 package com.javamaniax.dochi;
 
-import com.javamaniax.docbook5.Visitor;
-import com.javamaniax.docbook5.VisitorInterface;
 import java.io.File;
 import java.io.IOException;
 
