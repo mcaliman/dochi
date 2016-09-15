@@ -400,14 +400,14 @@ import org.docbook.ns.docbook.Year;
  *
  * @author Massimo Caliman
  */
-public class Visitor {
+public class PrintDocbookVisitor {
 
-    private final static Logger logger = Logger.getLogger(Visitor.class.getName());
+    private final static Logger logger = Logger.getLogger(PrintDocbookVisitor.class.getName());
 
-    public long numberOfChapters;
-    public long numberOfPara;
+    private long numberOfChapters;
+    private long numberOfPara;
 
-    public Visitor() {
+    public PrintDocbookVisitor() {
 
     }
 
@@ -493,7 +493,7 @@ public class Visitor {
 
         String id = book.getId();
 
-        Visitor.this.visit(book.getInfo());
+        visit(book.getInfo());
 
         book.getLabel();
         book.getLinkend();
@@ -520,213 +520,213 @@ public class Visitor {
         System.out.println("=========================================");
     }
 
-    public Book visitBookFile(File file) {
+    public void visitBookFile(File file) {
         Book book = new Book();
         try {
             JAXBContext jaxbCtx = JAXBContext.newInstance(book.getClass());
             Unmarshaller unmarshaller = jaxbCtx.createUnmarshaller();
             Source source = new StreamSource(file);
             book = (Book) unmarshaller.unmarshal(source);
-            Visitor.this.visit(book);
+            visit(book);
         } catch (JAXBException ex) {
             logger.log(Level.SEVERE, null, ex);
         }
-        return book;
+        //return book;
     }
 
-    public Article visitArticleFile(File file) {
+    public void visitArticleFile(File file) {
         Article article = new Article();
         try {
             JAXBContext jaxbCtx = JAXBContext.newInstance(article.getClass());
             Unmarshaller unmarshaller = jaxbCtx.createUnmarshaller();
             Source source = new StreamSource(file);
             article = (Article) unmarshaller.unmarshal(source);
-            Visitor.this.visit(article);
+            visit(article);
         } catch (JAXBException ex) {
             logger.log(Level.SEVERE, null, ex);
         }
-        return article;
+        //return article;
     }
 
     //Experiment: show how to remove multiple if (severals if) and instanceof? (List<Object> is the prob.)
     public void visitElement(Object element) {
         if (element instanceof Abbrev) {
         } else if (element instanceof Abstract) {
-            Visitor.this.visit((Abstract) element);
+            visit((Abstract) element);
         } else if (element instanceof Accel) {
-            Visitor.this.visit((Accel) element);
+            visit((Accel) element);
         } else if (element instanceof Acknowledgements) {
-            Visitor.this.visit((Acknowledgements) element);
+            visit((Acknowledgements) element);
         } else if (element instanceof Acronym) {
-            Visitor.this.visit((Acronym) element);
+            visit((Acronym) element);
         } else if (element instanceof Address) {
-            Visitor.this.visit((Address) element);
+            visit((Address) element);
         } else if (element instanceof Affiliation) {
-            Visitor.this.visit((Affiliation) element);
+            visit((Affiliation) element);
         } else if (element instanceof Alt) {
-            Visitor.this.visit((Alt) element);
+            visit((Alt) element);
         } else if (element instanceof Anchor) {
-            Visitor.this.visit((Anchor) element);
+            visit((Anchor) element);
         } else if (element instanceof Annotation) {
-            Visitor.this.visit((Annotation) element);
+            visit((Annotation) element);
         } else if (element instanceof Answer) {
-            Visitor.this.visit((Answer) element);
+            visit((Answer) element);
         } else if (element instanceof Appendix) {
-            Visitor.this.visit((Appendix) element);
+            visit((Appendix) element);
         } else if (element instanceof Application) {
-            Visitor.this.visit((Application) element);
+            visit((Application) element);
         } else if (element instanceof Arc) {
-            Visitor.this.visit((Arc) element);
+            visit((Arc) element);
         } else if (element instanceof Area) {
-            Visitor.this.visit((Area) element);
+            visit((Area) element);
         } else if (element instanceof Areaset) {
-            Visitor.this.visit((Areaset) element);
+            visit((Areaset) element);
         } else if (element instanceof Areaspec) {
-            Visitor.this.visit((Areaspec) element);
+            visit((Areaspec) element);
         } else if (element instanceof Arg) {
-            Visitor.this.visit((Arg) element);
+            visit((Arg) element);
         } else if (element instanceof Article) {
-            Visitor.this.visit((Article) element);
+            visit((Article) element);
         } else if (element instanceof Artpagenums) {
-            Visitor.this.visit((Artpagenums) element);
+            visit((Artpagenums) element);
         } else if (element instanceof Attribution) {
-            Visitor.this.visit((Attribution) element);
+            visit((Attribution) element);
         } else if (element instanceof Audiodata) {
-            Visitor.this.visit((Audiodata) element);
+            visit((Audiodata) element);
         } else if (element instanceof Audioobject) {
-            Visitor.this.visit((Audioobject) element);
+            visit((Audioobject) element);
         } else if (element instanceof Author) {
-            Visitor.this.visit((Author) element);
+            visit((Author) element);
         } else if (element instanceof Authorgroup) {
-            Visitor.this.visit((Authorgroup) element);
+            visit((Authorgroup) element);
         } else if (element instanceof Authorinitials) {
-            Visitor.this.visit((Authorinitials) element);
+            visit((Authorinitials) element);
         } else if (element instanceof Bibliocoverage) {
-            Visitor.this.visit((Bibliocoverage) element);
+            visit((Bibliocoverage) element);
         } else if (element instanceof Bibliodiv) {
-            Visitor.this.visit((Bibliodiv) element);
+            visit((Bibliodiv) element);
         } else if (element instanceof Biblioentry) {
-            Visitor.this.visit((Biblioentry) element);
+            visit((Biblioentry) element);
         } else if (element instanceof Bibliography) {
-            Visitor.this.visit((Bibliography) element);
+            visit((Bibliography) element);
         } else if (element instanceof Biblioid) {
-            Visitor.this.visit((Biblioid) element);
+            visit((Biblioid) element);
         } else if (element instanceof Bibliolist) {
-            Visitor.this.visit((Biblioid) element);
+            visit((Biblioid) element);
         } else if (element instanceof Bibliomisc) {
-            Visitor.this.visit((Bibliomisc) element);
+            visit((Bibliomisc) element);
         } else if (element instanceof Bibliomixed) {
-            Visitor.this.visit((Bibliomixed) element);
+            visit((Bibliomixed) element);
         } else if (element instanceof Bibliomset) {
-            Visitor.this.visit((Bibliomset) element);
+            visit((Bibliomset) element);
         } else if (element instanceof Biblioref) {
-            Visitor.this.visit((Biblioref) element);
+            visit((Biblioref) element);
         } else if (element instanceof Bibliorelation) {
-            Visitor.this.visit((Bibliorelation) element);
+            visit((Bibliorelation) element);
         } else if (element instanceof Biblioset) {
-            Visitor.this.visit((Biblioset) element);
+            visit((Biblioset) element);
         } else if (element instanceof Bibliosource) {
-            Visitor.this.visit((Bibliosource) element);
+            visit((Bibliosource) element);
         } else if (element instanceof Blockquote) {
-            Visitor.this.visit((Blockquote) element);
+            visit((Blockquote) element);
         } else if (element instanceof Book) {
-            Visitor.this.visit((Book) element);
+            visit((Book) element);
         } else if (element instanceof Bridgehead) {
-            Visitor.this.visit((Bridgehead) element);
+            visit((Bridgehead) element);
         } else if (element instanceof Callout) {
-            Visitor.this.visit((Callout) element);
+            visit((Callout) element);
         } else if (element instanceof Calloutlist) {
-            Visitor.this.visit((Calloutlist) element);
+            visit((Calloutlist) element);
         } else if (element instanceof Caption) {
-            Visitor.this.visit((Caption) element);
+            visit((Caption) element);
         } else if (element instanceof Caution) {
-            Visitor.this.visit((Caution) element);
+            visit((Caution) element);
         } else if (element instanceof Chapter) {
-            Visitor.this.visit((Chapter) element);
+            visit((Chapter) element);
         } else if (element instanceof Citation) {
-            Visitor.this.visit((Citation) element);
+            visit((Citation) element);
         } else if (element instanceof Citebiblioid) {
-            Visitor.this.visit((Citebiblioid) element);
+            visit((Citebiblioid) element);
         } else if (element instanceof Citerefentry) {
-            Visitor.this.visit((Citerefentry) element);
+            visit((Citerefentry) element);
         } else if (element instanceof Citetitle) {
-            Visitor.this.visit((Citetitle) element);
+            visit((Citetitle) element);
         } else if (element instanceof City) {
-            Visitor.this.visit((City) element);
+            visit((City) element);
         } else if (element instanceof Classname) {
-            Visitor.this.visit((Classname) element);
+            visit((Classname) element);
         } else if (element instanceof Classsynopsis) {
-            Visitor.this.visit((Classsynopsis) element);
+            visit((Classsynopsis) element);
         } else if (element instanceof Classsynopsisinfo) {
-            Visitor.this.visit((Classsynopsisinfo) element);
+            visit((Classsynopsisinfo) element);
         } else if (element instanceof Cmdsynopsis) {
-            Visitor.this.visit((Cmdsynopsis) element);
+            visit((Cmdsynopsis) element);
         } else if (element instanceof Co) {
-            Visitor.this.visit((Co) element);
+            visit((Co) element);
         } else if (element instanceof Code) {
-            Visitor.this.visit((Code) element);
+            visit((Code) element);
         } else if (element instanceof Col) {
-            Visitor.this.visit((Col) element);
+            visit((Col) element);
         } else if (element instanceof Colgroup) {
-            Visitor.this.visit((Colgroup) element);
+            visit((Colgroup) element);
         } else if (element instanceof Collab) {
-            Visitor.this.visit((Collab) element);
+            visit((Collab) element);
         } else if (element instanceof Colophon) {
-            Visitor.this.visit((Colophon) element);
+            visit((Colophon) element);
         } else if (element instanceof Colspec) {
-            Visitor.this.visit((Colspec) element);
+            visit((Colspec) element);
         } else if (element instanceof Command) {
-            Visitor.this.visit((Command) element);
+            visit((Command) element);
         } else if (element instanceof Computeroutput) {
-            Visitor.this.visit((Computeroutput) element);
+            visit((Computeroutput) element);
         } else if (element instanceof Confdates) {
-            Visitor.this.visit((Confdates) element);
+            visit((Confdates) element);
         } else if (element instanceof Confgroup) {
-            Visitor.this.visit((Confgroup) element);
+            visit((Confgroup) element);
         } else if (element instanceof Confnum) {
-            Visitor.this.visit((Confnum) element);
+            visit((Confnum) element);
         } else if (element instanceof Confsponsor) {
-            Visitor.this.visit((Confsponsor) element);
+            visit((Confsponsor) element);
         } else if (element instanceof Conftitle) {
-            Visitor.this.visit((Conftitle) element);
+            visit((Conftitle) element);
         } else if (element instanceof Constant) {
-            Visitor.this.visit((Constant) element);
+            visit((Constant) element);
         } else if (element instanceof Constraint) {
-            Visitor.this.visit((Constraint) element);
+            visit((Constraint) element);
         } else if (element instanceof Constraintdef) {
-            Visitor.this.visit((Constraintdef) element);
+            visit((Constraintdef) element);
         } else if (element instanceof Constructorsynopsis) {
-            Visitor.this.visit((Constructorsynopsis) element);
+            visit((Constructorsynopsis) element);
         } else if (element instanceof Contractnum) {
-            Visitor.this.visit((Contractnum) element);
+            visit((Contractnum) element);
         } else if (element instanceof Contractsponsor) {
-            Visitor.this.visit((Contractsponsor) element);
+            visit((Contractsponsor) element);
         } else if (element instanceof Contrib) {
-            Visitor.this.visit((Contrib) element);
+            visit((Contrib) element);
         } else if (element instanceof Copyright) {
-            Visitor.this.visit((Copyright) element);
+            visit((Copyright) element);
         } else if (element instanceof Coref) {
-            Visitor.this.visit((Coref) element);
+            visit((Coref) element);
         } else if (element instanceof Country) {
-            Visitor.this.visit((Country) element);
+            visit((Country) element);
         } else if (element instanceof Cover) {
-            Visitor.this.visit((Cover) element);
+            visit((Cover) element);
         } else if (element instanceof Database) {
-            Visitor.this.visit((Database) element);
+            visit((Database) element);
         } else if (element instanceof Date) {
-            Visitor.this.visit((Date) element);
+            visit((Date) element);
         } else if (element instanceof Dedication) {
-            Visitor.this.visit((Dedication) element);
+            visit((Dedication) element);
         } else if (element instanceof Destructorsynopsis) {
-            Visitor.this.visit((Destructorsynopsis) element);
+            visit((Destructorsynopsis) element);
         } else if (element instanceof Edition) {
-            Visitor.this.visit((Edition) element);
+            visit((Edition) element);
         } else if (element instanceof Editor) {
-            Visitor.this.visit((Editor) element);
+            visit((Editor) element);
         } else if (element instanceof Email) {
-            Visitor.this.visit((Email) element);
+            visit((Email) element);
         } else if (element instanceof Emphasis) {
-            Visitor.this.visit((Emphasis) element);
+            visit((Emphasis) element);
         } else if (element instanceof Entry) {
         } else if (element instanceof Entrytbl) {
         } else if (element instanceof Envar) {
@@ -778,12 +778,12 @@ public class Visitor {
         } else if (element instanceof Imageobjectco) {
         } else if (element instanceof Important) {
         } else if (element instanceof Index) {
-            Visitor.this.visit((Index) element);
+            visit((Index) element);
         } else if (element instanceof Indexdiv) {
         } else if (element instanceof Indexentry) {
         } else if (element instanceof Indexterm) {
         } else if (element instanceof Info) {
-            Visitor.this.visit((Info) element);
+            visit((Info) element);
         } else if (element instanceof Informalequation) {
         } else if (element instanceof Informalexample) {
         } else if (element instanceof Informalfigure) {
@@ -837,7 +837,7 @@ public class Visitor {
         } else if (element instanceof Msgtext) {
         } else if (element instanceof Nonterminal) {
         } else if (element instanceof Note) {
-            Visitor.this.visit((Note) element);
+            visit((Note) element);
         } else if (element instanceof Olink) {
         } else if (element instanceof Ooclass) {
         } else if (element instanceof Ooexception) {
@@ -853,15 +853,15 @@ public class Visitor {
         } else if (element instanceof Othername) {
         } else if (element instanceof Pagenums) {
         } else if (element instanceof Para) {
-            Visitor.this.visit((Para) element);
+            visit((Para) element);
         } else if (element instanceof Paramdef) {
         } else if (element instanceof Parameter) {
         } else if (element instanceof Part) {
-            Visitor.this.visit((Part) element);
+            visit((Part) element);
         } else if (element instanceof Partintro) {
             visit((Partintro)element);
         } else if (element instanceof Person) {
-            Visitor.this.visit((Person) element);
+            visit((Person) element);
         } else if (element instanceof Personblurb) {
         } else if (element instanceof Personname) {
         } else if (element instanceof Phone) {
@@ -891,57 +891,57 @@ public class Visitor {
         } else if (element instanceof Question) {
         } else if (element instanceof Quote) {
         } else if (element instanceof Refclass) {
-            Visitor.this.visit((Refclass) element);
+            visit((Refclass) element);
         } else if (element instanceof Refdescriptor) {
-            Visitor.this.visit((Refdescriptor) element);
+            visit((Refdescriptor) element);
         } else if (element instanceof Refentry) {
-            Visitor.this.visit((Refentry) element);
+            visit((Refentry) element);
         } else if (element instanceof Refentrytitle) {
-            Visitor.this.visit((Refentrytitle) element);
+            visit((Refentrytitle) element);
         } else if (element instanceof Reference) {
-            Visitor.this.visit((Reference) element);
+            visit((Reference) element);
         } else if (element instanceof Refmeta) {
-            Visitor.this.visit((Refmeta) element);
+            visit((Refmeta) element);
         } else if (element instanceof Refmiscinfo) {
-            Visitor.this.visit((Refmiscinfo) element);
+            visit((Refmiscinfo) element);
         } else if (element instanceof Refname) {
-            Visitor.this.visit((Refname) element);
+            visit((Refname) element);
         } else if (element instanceof Refnamediv) {
-            Visitor.this.visit((Refnamediv) element);
+            visit((Refnamediv) element);
         } else if (element instanceof Refpurpose) {
-            Visitor.this.visit((Refpurpose) element);
+            visit((Refpurpose) element);
         } else if (element instanceof Refsect1) {
-            Visitor.this.visit((Refsect1) element);
+            visit((Refsect1) element);
         } else if (element instanceof Refsect2) {
-            Visitor.this.visit((Refsect2) element);
+            visit((Refsect2) element);
         } else if (element instanceof Refsect3) {
-            Visitor.this.visit((Refsect3) element);
+            visit((Refsect3) element);
         } else if (element instanceof Refsection) {
-            Visitor.this.visit((Refsection) element);
+            visit((Refsection) element);
         } else if (element instanceof Refsynopsisdiv) {
-            Visitor.this.visit((Refsynopsisdiv) element);
+            visit((Refsynopsisdiv) element);
         } else if (element instanceof Releaseinfo) {
-            Visitor.this.visit((Releaseinfo) element);
+            visit((Releaseinfo) element);
         } else if (element instanceof Remark) {
-            Visitor.this.visit((Remark) element);
+            visit((Remark) element);
         } else if (element instanceof Replaceable) {
-            Visitor.this.visit((Replaceable) element);
+            visit((Replaceable) element);
         } else if (element instanceof Returnvalue) {
-            Visitor.this.visit((Returnvalue) element);
+            visit((Returnvalue) element);
         } else if (element instanceof Revdescription) {
-            Visitor.this.visit((Revdescription) element);
+            visit((Revdescription) element);
         } else if (element instanceof Revhistory) {
-            Visitor.this.visit((Revhistory) element);
+            visit((Revhistory) element);
         } else if (element instanceof Revision) {
-            Visitor.this.visit((Revision) element);
+            visit((Revision) element);
         } else if (element instanceof Revnumber) {
-            Visitor.this.visit((Revnumber) element);
+            visit((Revnumber) element);
         } else if (element instanceof Revremark) {
-            Visitor.this.visit((Revremark) element);
+            visit((Revremark) element);
         } else if (element instanceof Rhs) {
-            Visitor.this.visit((Rhs) element);
+            visit((Rhs) element);
         } else if (element instanceof Row) {
-            Visitor.this.visit((Row) element);
+            visit((Row) element);
         } else if (element instanceof Sbr) {
         } else if (element instanceof Screen) {
         } else if (element instanceof Screenco) {
@@ -1010,7 +1010,7 @@ public class Visitor {
         } else if (element instanceof Thead) {
         } else if (element instanceof Tip) {
         } else if (element instanceof Title) {
-            Visitor.this.visit((Title) element);
+            visit((Title) element);
         } else if (element instanceof Titleabbrev) {
         } else if (element instanceof Toc) {
         } else if (element instanceof Tocdiv) {
@@ -1033,7 +1033,7 @@ public class Visitor {
         } else if (element instanceof Xref) {
         } else if (element instanceof Year) {
         } else if (element instanceof String) {
-            Visitor.this.visit((String) element);
+            visit((String) element);
         }
 
     }
