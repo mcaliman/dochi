@@ -431,14 +431,6 @@ public class Visitor {
         }
     }
 
-    /*public void visitTitlesAndTitleabbrevsAndSubtitlesList(List<Object> titlesAndTitleabbrevsAndSubtitles) {
-     if (titlesAndTitleabbrevsAndSubtitles == null) {
-     return;
-     }
-     for (Object object : titlesAndTitleabbrevsAndSubtitles) {
-     visitElement(object);
-     }
-     }*/
     public void visit(Para para) {
         print("Para:");
         this.numberOfPara++;
@@ -451,16 +443,10 @@ public class Visitor {
     public void visit(Chapter chapter) {
         print("Chapter:");
         this.numberOfChapters++;
-        String id = chapter.getId();
         visitObjectList(chapter.getTitlesAndTitleabbrevsAndSubtitles());
         visitObjectList(chapter.getGlossariesAndBibliographiesAndIndices());
     }
 
-    /*public void visitGlossariesAndBibliographiesAndIndicesList(List<Object> glossariesAndBibliographiesAndIndices) {
-     for (Object object : glossariesAndBibliographiesAndIndices) {
-     visitElement(object);
-     }
-     }*/
     public void visitObjectList(List<Object> list) {
         for (Object object : list) {
             visitElement(object);
@@ -469,18 +455,13 @@ public class Visitor {
 
     public void visitRefsectionList(List<Refsection> list) {
         for (Refsection refsection : list) {
-            visitObjectList(refsection.getTitlesAndTitleabbrevsAndSubtitles());
-            visitObjectList(refsection.getItemizedlistsAndOrderedlistsAndProcedures());
-            visitRefsectionList(refsection.getRefsections());
-
+            visit(refsection);            
         }
     }
 
-    //Refentries
     public void visitRefentryList(List<Refentry> list) {
         for (Refentry refentry : list) {
             visitRefsectionList(refentry.getRefsections());
-            //TODO
         }
     }
     
@@ -878,6 +859,7 @@ public class Visitor {
         } else if (element instanceof Part) {
             Visitor.this.visit((Part) element);
         } else if (element instanceof Partintro) {
+            visit((Partintro)element);
         } else if (element instanceof Person) {
             Visitor.this.visit((Person) element);
         } else if (element instanceof Personblurb) {
@@ -1909,7 +1891,7 @@ public class Visitor {
     }
 
     public void visit(Partintro element) {
-        //TODO
+        print("Partinto");
     }
 
     public void visit(Part element) {
@@ -2050,8 +2032,10 @@ public class Visitor {
     }
 
     public void visit(Reference element) {
-        element.getRefentries();
-        
+        print("Reference:");
+        this.visitObjectList(element.getTitlesAndTitleabbrevsAndSubtitles());
+        this.visitRefentryList(element.getRefentries());
+        //element.getPartintro();
     }
 
     public void visit(Refmeta element) {
@@ -2086,10 +2070,10 @@ public class Visitor {
         //TODO
     }
 
-    public void visit(Refsection element) {
-        visitObjectList(element.getTitlesAndTitleabbrevsAndSubtitles());
-        visitObjectList(element.getItemizedlistsAndOrderedlistsAndProcedures());
-        visitRefsectionList(element.getRefsections());
+    public void visit(Refsection refsection) {
+        visitObjectList(refsection.getTitlesAndTitleabbrevsAndSubtitles());
+        visitObjectList(refsection.getItemizedlistsAndOrderedlistsAndProcedures());
+        visitRefsectionList(refsection.getRefsections());        
     }
 
     public void visit(Refsynopsisdiv element) {
