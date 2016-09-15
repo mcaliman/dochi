@@ -400,7 +400,7 @@ import org.docbook.ns.docbook.Year;
  *
  * @author Massimo Caliman
  */
-public class Visitor implements VisitorInterface {
+public class Visitor {
 
     private final static Logger logger = Logger.getLogger(Visitor.class.getName());
 
@@ -419,92 +419,78 @@ public class Visitor implements VisitorInterface {
         System.out.println(string);
     }
 
-    @Override
     public void visit(String content) {
         println(content);
     }
 
-    @Override
     public void visit(Title title) {
         print("Title:");
         List<Object> list = title.getContent();
         for (Object object : list) {
             visitElement(object);
-            /*if (object instanceof String) {
-             visit((String) object);
-             }*/
         }
     }
 
-    @Override
-    public void visitTitlesAndTitleabbrevsAndSubtitlesList(List<Object> titlesAndTitleabbrevsAndSubtitles) {
-        if (titlesAndTitleabbrevsAndSubtitles == null) {
-            return;
-        }
-        for (Object object : titlesAndTitleabbrevsAndSubtitles) {
-            visitTitlesAndTitleabbrevsAndSubtitles(object);
-        }
-    }
-
-    @Override
-    public void visitTitlesAndTitleabbrevsAndSubtitles(Object object) {
-        /*if (object instanceof Title) {
-         visit((Title) object);
-         }*/
-        visitElement(object);
-    }
-
-    @Override
+    /*public void visitTitlesAndTitleabbrevsAndSubtitlesList(List<Object> titlesAndTitleabbrevsAndSubtitles) {
+     if (titlesAndTitleabbrevsAndSubtitles == null) {
+     return;
+     }
+     for (Object object : titlesAndTitleabbrevsAndSubtitles) {
+     visitElement(object);
+     }
+     }*/
     public void visit(Para para) {
         print("Para:");
         this.numberOfPara++;
-        //String id = para.getId();
-        //System.out.println("para_id:" + id);
         List<Object> list = para.getContent();
         for (Object object : list) {
-            /*if (object instanceof String) {
-             visit((String) object);
-             }*/
             visitElement(object);
         }
     }
 
-    @Override
     public void visit(Chapter chapter) {
         print("Chapter:");
         this.numberOfChapters++;
         String id = chapter.getId();
-        //System.out.println("chapter_id:" + id);
-        visitTitlesAndTitleabbrevsAndSubtitlesList(chapter.getTitlesAndTitleabbrevsAndSubtitles());
-        visitGlossariesAndBibliographiesAndIndicesList(chapter.getGlossariesAndBibliographiesAndIndices());
+        visitObjectList(chapter.getTitlesAndTitleabbrevsAndSubtitles());
+        visitObjectList(chapter.getGlossariesAndBibliographiesAndIndices());
     }
 
-    @Override
-    public void visitGlossariesAndBibliographiesAndIndicesList(List<Object> glossariesAndBibliographiesAndIndices) {
-        for (Object object : glossariesAndBibliographiesAndIndices) {
-            visitGlossariesAndBibliographiesAndIndices(object);
+    /*public void visitGlossariesAndBibliographiesAndIndicesList(List<Object> glossariesAndBibliographiesAndIndices) {
+     for (Object object : glossariesAndBibliographiesAndIndices) {
+     visitElement(object);
+     }
+     }*/
+    public void visitObjectList(List<Object> list) {
+        for (Object object : list) {
+            visitElement(object);
         }
     }
 
-    @Override
-    public void visitGlossariesAndBibliographiesAndIndices(Object object) {
-        /*if (object instanceof Chapter) {
-         visit((Chapter) object);
-         } else if (object instanceof Para) {
-         visit((Para) object);
-         }*/
+    public void visitRefsectionList(List<Refsection> list) {
+        for (Refsection refsection : list) {
+            visitObjectList(refsection.getTitlesAndTitleabbrevsAndSubtitles());
+            visitObjectList(refsection.getItemizedlistsAndOrderedlistsAndProcedures());
+            visitRefsectionList(refsection.getRefsections());
 
-        visitElement(object);
+        }
     }
 
-    @Override
+    //Refentries
+    public void visitRefentryList(List<Refentry> list) {
+        for (Refentry refentry : list) {
+            visitRefsectionList(refentry.getRefsections());
+            //TODO
+        }
+    }
+    
     public void visit(Article article) {
         //TODO
+
         article.getTitlesAndTitleabbrevsAndSubtitles();
         article.getGlossariesAndBibliographiesAndIndices();
     }
 
-    @Override
     public void visit(Book book) {
         String actuate = book.getActuate();
         String annotations = book.getAnnotations();
@@ -519,14 +505,14 @@ public class Visitor implements VisitorInterface {
         book.getCondition();
         book.getConformance();
         book.getDir();
-        this.visitTitlesAndTitleabbrevsAndSubtitlesList(book.getTitlesAndTitleabbrevsAndSubtitles());
-        this.visitGlossariesAndBibliographiesAndIndicesList(book.getGlossariesAndBibliographiesAndIndices());
+        this.visitObjectList(book.getTitlesAndTitleabbrevsAndSubtitles());
+        this.visitObjectList(book.getGlossariesAndBibliographiesAndIndices());
 
         book.getHref();
 
         String id = book.getId();
 
-        visit(book.getInfo());
+        Visitor.this.visit(book.getInfo());
 
         book.getLabel();
         book.getLinkend();
@@ -553,7 +539,6 @@ public class Visitor implements VisitorInterface {
         System.out.println("=========================================");
     }
 
-    @Override
     public Book visitBookFile(File file) {
         Book book = new Book();
         try {
@@ -561,14 +546,13 @@ public class Visitor implements VisitorInterface {
             Unmarshaller unmarshaller = jaxbCtx.createUnmarshaller();
             Source source = new StreamSource(file);
             book = (Book) unmarshaller.unmarshal(source);
-            visit(book);
+            Visitor.this.visit(book);
         } catch (JAXBException ex) {
             logger.log(Level.SEVERE, null, ex);
         }
         return book;
     }
 
-    @Override
     public Article visitArticleFile(File file) {
         Article article = new Article();
         try {
@@ -576,7 +560,7 @@ public class Visitor implements VisitorInterface {
             Unmarshaller unmarshaller = jaxbCtx.createUnmarshaller();
             Source source = new StreamSource(file);
             article = (Article) unmarshaller.unmarshal(source);
-            visit(article);
+            Visitor.this.visit(article);
         } catch (JAXBException ex) {
             logger.log(Level.SEVERE, null, ex);
         }
@@ -587,172 +571,181 @@ public class Visitor implements VisitorInterface {
     public void visitElement(Object element) {
         if (element instanceof Abbrev) {
         } else if (element instanceof Abstract) {
-            visit((Abstract) element);
+            Visitor.this.visit((Abstract) element);
         } else if (element instanceof Accel) {
-            visit((Accel) element);
+            Visitor.this.visit((Accel) element);
         } else if (element instanceof Acknowledgements) {
-            visit((Acknowledgements) element);
+            Visitor.this.visit((Acknowledgements) element);
         } else if (element instanceof Acronym) {
-            visit((Acronym) element);
+            Visitor.this.visit((Acronym) element);
         } else if (element instanceof Address) {
-            visit((Address) element);
+            Visitor.this.visit((Address) element);
         } else if (element instanceof Affiliation) {
-            visit((Affiliation) element);
+            Visitor.this.visit((Affiliation) element);
         } else if (element instanceof Alt) {
-            visit((Alt) element);
+            Visitor.this.visit((Alt) element);
         } else if (element instanceof Anchor) {
-            visit((Anchor) element);
+            Visitor.this.visit((Anchor) element);
         } else if (element instanceof Annotation) {
-            visit((Annotation) element);
+            Visitor.this.visit((Annotation) element);
         } else if (element instanceof Answer) {
-            visit((Answer) element);
+            Visitor.this.visit((Answer) element);
         } else if (element instanceof Appendix) {
-            visit((Appendix) element);
+            Visitor.this.visit((Appendix) element);
         } else if (element instanceof Application) {
-            visit((Application) element);
+            Visitor.this.visit((Application) element);
         } else if (element instanceof Arc) {
-            visit((Arc) element);
+            Visitor.this.visit((Arc) element);
         } else if (element instanceof Area) {
-            visit((Area) element);
+            Visitor.this.visit((Area) element);
         } else if (element instanceof Areaset) {
-            visit((Areaset) element);
+            Visitor.this.visit((Areaset) element);
         } else if (element instanceof Areaspec) {
-            visit((Areaspec) element);
+            Visitor.this.visit((Areaspec) element);
         } else if (element instanceof Arg) {
-            visit((Arg) element);
+            Visitor.this.visit((Arg) element);
         } else if (element instanceof Article) {
-            visit((Article) element);
+            Visitor.this.visit((Article) element);
         } else if (element instanceof Artpagenums) {
-            visit((Artpagenums) element);
+            Visitor.this.visit((Artpagenums) element);
         } else if (element instanceof Attribution) {
-            visit((Attribution) element);
+            Visitor.this.visit((Attribution) element);
         } else if (element instanceof Audiodata) {
-            visit((Audiodata) element);
+            Visitor.this.visit((Audiodata) element);
         } else if (element instanceof Audioobject) {
-            visit((Audioobject) element);
+            Visitor.this.visit((Audioobject) element);
         } else if (element instanceof Author) {
-            visit((Author) element);
+            Visitor.this.visit((Author) element);
         } else if (element instanceof Authorgroup) {
-            visit((Authorgroup) element);
+            Visitor.this.visit((Authorgroup) element);
         } else if (element instanceof Authorinitials) {
-            visit((Authorinitials) element);
+            Visitor.this.visit((Authorinitials) element);
         } else if (element instanceof Bibliocoverage) {
-            visit((Bibliocoverage) element);
+            Visitor.this.visit((Bibliocoverage) element);
         } else if (element instanceof Bibliodiv) {
-            visit((Bibliodiv) element);
+            Visitor.this.visit((Bibliodiv) element);
         } else if (element instanceof Biblioentry) {
-            visit((Biblioentry) element);
+            Visitor.this.visit((Biblioentry) element);
         } else if (element instanceof Bibliography) {
-            visit((Bibliography) element);
+            Visitor.this.visit((Bibliography) element);
         } else if (element instanceof Biblioid) {
-            visit((Biblioid) element);
+            Visitor.this.visit((Biblioid) element);
         } else if (element instanceof Bibliolist) {
-            visit((Biblioid) element);
+            Visitor.this.visit((Biblioid) element);
         } else if (element instanceof Bibliomisc) {
-            visit((Bibliomisc) element);
+            Visitor.this.visit((Bibliomisc) element);
         } else if (element instanceof Bibliomixed) {
-            visit((Bibliomixed) element);
+            Visitor.this.visit((Bibliomixed) element);
         } else if (element instanceof Bibliomset) {
-            visit((Bibliomset) element);
+            Visitor.this.visit((Bibliomset) element);
         } else if (element instanceof Biblioref) {
-            visit((Biblioref) element);
+            Visitor.this.visit((Biblioref) element);
         } else if (element instanceof Bibliorelation) {
-            visit((Bibliorelation) element);
+            Visitor.this.visit((Bibliorelation) element);
         } else if (element instanceof Biblioset) {
-            visit((Biblioset) element);
+            Visitor.this.visit((Biblioset) element);
         } else if (element instanceof Bibliosource) {
-            visit((Bibliosource) element);
+            Visitor.this.visit((Bibliosource) element);
         } else if (element instanceof Blockquote) {
-            visit((Blockquote) element);
+            Visitor.this.visit((Blockquote) element);
         } else if (element instanceof Book) {
-            visit((Book) element);
+            Visitor.this.visit((Book) element);
         } else if (element instanceof Bridgehead) {
-            visit((Bridgehead) element);
+            Visitor.this.visit((Bridgehead) element);
         } else if (element instanceof Callout) {
-            visit((Callout) element);
+            Visitor.this.visit((Callout) element);
         } else if (element instanceof Calloutlist) {
-            visit((Calloutlist) element);
+            Visitor.this.visit((Calloutlist) element);
         } else if (element instanceof Caption) {
-            visit((Caption) element);
+            Visitor.this.visit((Caption) element);
         } else if (element instanceof Caution) {
-            visit((Caution) element);
+            Visitor.this.visit((Caution) element);
         } else if (element instanceof Chapter) {
-            visit((Chapter) element);
+            Visitor.this.visit((Chapter) element);
         } else if (element instanceof Citation) {
-            visit((Citation) element);
+            Visitor.this.visit((Citation) element);
         } else if (element instanceof Citebiblioid) {
-            visit((Citebiblioid) element);
+            Visitor.this.visit((Citebiblioid) element);
         } else if (element instanceof Citerefentry) {
-            visit((Citerefentry) element);
+            Visitor.this.visit((Citerefentry) element);
         } else if (element instanceof Citetitle) {
-            visit((Citetitle) element);
+            Visitor.this.visit((Citetitle) element);
         } else if (element instanceof City) {
-            visit((City) element);
+            Visitor.this.visit((City) element);
         } else if (element instanceof Classname) {
-            visit((Classname) element);
+            Visitor.this.visit((Classname) element);
         } else if (element instanceof Classsynopsis) {
-            visit((Classsynopsis) element);
+            Visitor.this.visit((Classsynopsis) element);
         } else if (element instanceof Classsynopsisinfo) {
-            visit((Classsynopsisinfo) element);
+            Visitor.this.visit((Classsynopsisinfo) element);
         } else if (element instanceof Cmdsynopsis) {
-            visit((Cmdsynopsis) element);
+            Visitor.this.visit((Cmdsynopsis) element);
         } else if (element instanceof Co) {
-            visit((Co) element);
+            Visitor.this.visit((Co) element);
         } else if (element instanceof Code) {
-            visit((Code) element);
+            Visitor.this.visit((Code) element);
         } else if (element instanceof Col) {
-            visit((Col) element);
+            Visitor.this.visit((Col) element);
         } else if (element instanceof Colgroup) {
-            visit((Colgroup) element);
+            Visitor.this.visit((Colgroup) element);
         } else if (element instanceof Collab) {
-            visit((Collab) element);
+            Visitor.this.visit((Collab) element);
         } else if (element instanceof Colophon) {
-            visit((Colophon) element);
+            Visitor.this.visit((Colophon) element);
         } else if (element instanceof Colspec) {
-            visit((Colspec) element);
+            Visitor.this.visit((Colspec) element);
         } else if (element instanceof Command) {
-            visit((Command) element);
+            Visitor.this.visit((Command) element);
         } else if (element instanceof Computeroutput) {
-            visit((Computeroutput) element);
+            Visitor.this.visit((Computeroutput) element);
         } else if (element instanceof Confdates) {
-            visit((Confdates) element);
+            Visitor.this.visit((Confdates) element);
         } else if (element instanceof Confgroup) {
-            visit((Confgroup) element);
+            Visitor.this.visit((Confgroup) element);
         } else if (element instanceof Confnum) {
-            visit((Confnum) element);
+            Visitor.this.visit((Confnum) element);
         } else if (element instanceof Confsponsor) {
-            visit((Confsponsor) element);
+            Visitor.this.visit((Confsponsor) element);
         } else if (element instanceof Conftitle) {
-            visit((Conftitle) element);
+            Visitor.this.visit((Conftitle) element);
         } else if (element instanceof Constant) {
-            visit((Constant) element);
+            Visitor.this.visit((Constant) element);
         } else if (element instanceof Constraint) {
-            visit((Constraint) element);
+            Visitor.this.visit((Constraint) element);
         } else if (element instanceof Constraintdef) {
-            visit((Constraintdef) element);
+            Visitor.this.visit((Constraintdef) element);
         } else if (element instanceof Constructorsynopsis) {
-            visit((Constructorsynopsis) element);
+            Visitor.this.visit((Constructorsynopsis) element);
         } else if (element instanceof Contractnum) {
-            visit((Contractnum) element);
+            Visitor.this.visit((Contractnum) element);
         } else if (element instanceof Contractsponsor) {
-            visit((Contractsponsor) element);
+            Visitor.this.visit((Contractsponsor) element);
         } else if (element instanceof Contrib) {
-            visit((Contrib) element);
+            Visitor.this.visit((Contrib) element);
         } else if (element instanceof Copyright) {
-            visit((Copyright) element);
+            Visitor.this.visit((Copyright) element);
         } else if (element instanceof Coref) {
-            visit((Coref) element);
+            Visitor.this.visit((Coref) element);
         } else if (element instanceof Country) {
-            visit((Country) element);
+            Visitor.this.visit((Country) element);
         } else if (element instanceof Cover) {
+            Visitor.this.visit((Cover) element);
         } else if (element instanceof Database) {
+            Visitor.this.visit((Database) element);
         } else if (element instanceof Date) {
+            Visitor.this.visit((Date) element);
         } else if (element instanceof Dedication) {
+            Visitor.this.visit((Dedication) element);
         } else if (element instanceof Destructorsynopsis) {
+            Visitor.this.visit((Destructorsynopsis) element);
         } else if (element instanceof Edition) {
+            Visitor.this.visit((Edition) element);
         } else if (element instanceof Editor) {
+            Visitor.this.visit((Editor) element);
         } else if (element instanceof Email) {
+            Visitor.this.visit((Email) element);
         } else if (element instanceof Emphasis) {
+            Visitor.this.visit((Emphasis) element);
         } else if (element instanceof Entry) {
         } else if (element instanceof Entrytbl) {
         } else if (element instanceof Envar) {
@@ -804,10 +797,12 @@ public class Visitor implements VisitorInterface {
         } else if (element instanceof Imageobjectco) {
         } else if (element instanceof Important) {
         } else if (element instanceof Index) {
+            Visitor.this.visit((Index) element);
         } else if (element instanceof Indexdiv) {
         } else if (element instanceof Indexentry) {
         } else if (element instanceof Indexterm) {
         } else if (element instanceof Info) {
+            Visitor.this.visit((Info) element);
         } else if (element instanceof Informalequation) {
         } else if (element instanceof Informalexample) {
         } else if (element instanceof Informalfigure) {
@@ -861,6 +856,7 @@ public class Visitor implements VisitorInterface {
         } else if (element instanceof Msgtext) {
         } else if (element instanceof Nonterminal) {
         } else if (element instanceof Note) {
+            Visitor.this.visit((Note) element);
         } else if (element instanceof Olink) {
         } else if (element instanceof Ooclass) {
         } else if (element instanceof Ooexception) {
@@ -876,12 +872,14 @@ public class Visitor implements VisitorInterface {
         } else if (element instanceof Othername) {
         } else if (element instanceof Pagenums) {
         } else if (element instanceof Para) {
-            visit((Para) element);
+            Visitor.this.visit((Para) element);
         } else if (element instanceof Paramdef) {
         } else if (element instanceof Parameter) {
         } else if (element instanceof Part) {
+            Visitor.this.visit((Part) element);
         } else if (element instanceof Partintro) {
         } else if (element instanceof Person) {
+            Visitor.this.visit((Person) element);
         } else if (element instanceof Personblurb) {
         } else if (element instanceof Personname) {
         } else if (element instanceof Phone) {
@@ -911,31 +909,57 @@ public class Visitor implements VisitorInterface {
         } else if (element instanceof Question) {
         } else if (element instanceof Quote) {
         } else if (element instanceof Refclass) {
+            Visitor.this.visit((Refclass) element);
         } else if (element instanceof Refdescriptor) {
+            Visitor.this.visit((Refdescriptor) element);
         } else if (element instanceof Refentry) {
+            Visitor.this.visit((Refentry) element);
         } else if (element instanceof Refentrytitle) {
+            Visitor.this.visit((Refentrytitle) element);
         } else if (element instanceof Reference) {
+            Visitor.this.visit((Reference) element);
         } else if (element instanceof Refmeta) {
+            Visitor.this.visit((Refmeta) element);
         } else if (element instanceof Refmiscinfo) {
+            Visitor.this.visit((Refmiscinfo) element);
         } else if (element instanceof Refname) {
+            Visitor.this.visit((Refname) element);
         } else if (element instanceof Refnamediv) {
+            Visitor.this.visit((Refnamediv) element);
         } else if (element instanceof Refpurpose) {
+            Visitor.this.visit((Refpurpose) element);
         } else if (element instanceof Refsect1) {
+            Visitor.this.visit((Refsect1) element);
         } else if (element instanceof Refsect2) {
+            Visitor.this.visit((Refsect2) element);
         } else if (element instanceof Refsect3) {
+            Visitor.this.visit((Refsect3) element);
         } else if (element instanceof Refsection) {
+            Visitor.this.visit((Refsection) element);
         } else if (element instanceof Refsynopsisdiv) {
+            Visitor.this.visit((Refsynopsisdiv) element);
         } else if (element instanceof Releaseinfo) {
+            Visitor.this.visit((Releaseinfo) element);
         } else if (element instanceof Remark) {
+            Visitor.this.visit((Remark) element);
         } else if (element instanceof Replaceable) {
+            Visitor.this.visit((Replaceable) element);
         } else if (element instanceof Returnvalue) {
+            Visitor.this.visit((Returnvalue) element);
         } else if (element instanceof Revdescription) {
+            Visitor.this.visit((Revdescription) element);
         } else if (element instanceof Revhistory) {
+            Visitor.this.visit((Revhistory) element);
         } else if (element instanceof Revision) {
+            Visitor.this.visit((Revision) element);
         } else if (element instanceof Revnumber) {
+            Visitor.this.visit((Revnumber) element);
         } else if (element instanceof Revremark) {
+            Visitor.this.visit((Revremark) element);
         } else if (element instanceof Rhs) {
+            Visitor.this.visit((Rhs) element);
         } else if (element instanceof Row) {
+            Visitor.this.visit((Row) element);
         } else if (element instanceof Sbr) {
         } else if (element instanceof Screen) {
         } else if (element instanceof Screenco) {
@@ -1004,7 +1028,7 @@ public class Visitor implements VisitorInterface {
         } else if (element instanceof Thead) {
         } else if (element instanceof Tip) {
         } else if (element instanceof Title) {
-            visit((Title) element);
+            Visitor.this.visit((Title) element);
         } else if (element instanceof Titleabbrev) {
         } else if (element instanceof Toc) {
         } else if (element instanceof Tocdiv) {
@@ -1027,1795 +1051,1447 @@ public class Visitor implements VisitorInterface {
         } else if (element instanceof Xref) {
         } else if (element instanceof Year) {
         } else if (element instanceof String) {
-            visit((String) element);
+            Visitor.this.visit((String) element);
         }
 
     }
 
-    @Override
     public void visit(Abbrev abbrev) {
         //TODO
     }
 
-    @Override
     public void visit(Abstract abstr) {
         //TODO
     }
 
-    @Override
     public void visit(Accel accel) {
         //TODO
     }
 
-    @Override
     public void visit(Acknowledgements acknowledgements) {
         //TODO
     }
 
-    @Override
     public void visit(Acronym acronym) {
         //TODO
     }
 
-    @Override
     public void visit(Address element) {
-        //TODO
+        print("Address:");
+        List<Object> content = element.getContent();
+        for (Object object : content) {
+            visitElement(object);
+        }
     }
 
-    @Override
     public void visit(Affiliation element) {
         //TODO
+
     }
 
-    @Override
     public void visit(Alt element) {
         //TODO
     }
 
-    @Override
     public void visit(Anchor element) {
         //TODO
     }
 
-    @Override
     public void visit(Annotation element) {
         //TODO
     }
 
-    @Override
     public void visit(Answer element) {
         //TODO
     }
 
-    @Override
     public void visit(Appendix element) {
         //TODO
     }
 
-    @Override
     public void visit(Application element) {
         //TODO
     }
 
-    @Override
     public void visit(Arc element) {
         //TODO
     }
 
-    @Override
     public void visit(Area element) {
         //TODO
     }
 
-    @Override
     public void visit(Areaset element) {
         //TODO
     }
 
-    @Override
     public void visit(Areaspec element) {
         //TODO
     }
 
-    @Override
     public void visit(Arg element) {
         //TODO
     }
 
-    @Override
     public void visit(Artpagenums element) {
         //TODO
     }
 
-    @Override
     public void visit(Attribution element) {
         //TODO
     }
 
-    @Override
     public void visit(Audiodata element) {
         //TODO
     }
 
-    @Override
     public void visit(Audioobject element) {
         //TODO
     }
 
-    @Override
     public void visit(Authorgroup element) {
         //TODO
     }
 
-    @Override
     public void visit(Authorinitials element) {
         //TODO
     }
 
-    @Override
     public void visit(Author element) {
         //TODO
     }
 
-    @Override
     public void visit(Bibliocoverage element) {
         //TODO
     }
 
-    @Override
     public void visit(Bibliodiv element) {
         //TODO
     }
 
-    @Override
     public void visit(Biblioentry element) {
         //TODO
     }
 
-    @Override
     public void visit(Bibliography element) {
         //TODO
     }
 
-    @Override
     public void visit(Biblioid element) {
         //TODO
     }
 
-    @Override
     public void visit(Bibliolist element) {
         //TODO
     }
 
-    @Override
     public void visit(Bibliomisc element) {
         //TODO
     }
 
-    @Override
     public void visit(Bibliomixed element) {
         //TODO
     }
 
-    @Override
     public void visit(Bibliomset element) {
         //TODO
     }
 
-    @Override
     public void visit(Biblioref element) {
         //TODO
     }
 
-    @Override
     public void visit(Bibliorelation element) {
         //TODO
     }
 
-    @Override
     public void visit(Biblioset element) {
         //TODO
     }
 
-    @Override
     public void visit(Bibliosource element) {
         //TODO
     }
 
-    @Override
     public void visit(Blockquote element) {
         //TODO
     }
 
-    @Override
     public void visit(Bridgehead element) {
         //TODO
     }
 
-    @Override
     public void visit(Callout element) {
         //TODO
     }
 
-    @Override
     public void visit(Calloutlist element) {
         //TODO
     }
 
-    @Override
     public void visit(Caption element) {
         //TODO
     }
 
-    @Override
     public void visit(Caution element) {
         //TODO
     }
 
-    @Override
     public void visit(Citation element) {
         //TODO
     }
 
-    @Override
     public void visit(Citebiblioid element) {
         //TODO
     }
 
-    @Override
     public void visit(Citerefentry element) {
         //TODO
     }
 
-    @Override
     public void visit(Citetitle element) {
         //TODO
     }
 
-    @Override
     public void visit(City element) {
         //TODO
     }
 
-    @Override
     public void visit(Classname element) {
         //TODO
     }
 
-    @Override
     public void visit(Classsynopsisinfo element) {
         //TODO
     }
 
-    @Override
     public void visit(Classsynopsis element) {
         //TODO
     }
 
-    @Override
     public void visit(Cmdsynopsis element) {
         //TODO
     }
 
-    @Override
     public void visit(Code element) {
         //TODO
     }
 
-    @Override
     public void visit(Co element) {
         //TODO
     }
 
-    @Override
     public void visit(Colgroup element) {
         //TODO
     }
 
-    @Override
     public void visit(Col element) {
         //TODO
     }
 
-    @Override
     public void visit(Collab element) {
         //TODO
     }
 
-    @Override
     public void visit(Colophon element) {
         //TODO
     }
 
-    @Override
     public void visit(Colspec element) {
         //TODO
     }
 
-    @Override
     public void visit(Command element) {
         //TODO
     }
 
-    @Override
     public void visit(Computeroutput element) {
         //TODO
     }
 
-    @Override
     public void visit(Confdates element) {
         //TODO
     }
 
-    @Override
     public void visit(Confgroup element) {
         //TODO
     }
 
-    @Override
     public void visit(Confnum element) {
         //TODO
     }
 
-    @Override
     public void visit(Confsponsor element) {
         //TODO
     }
 
-    @Override
     public void visit(Conftitle element) {
         //TODO
     }
 
-    @Override
     public void visit(Constant element) {
         //TODO
     }
 
-    @Override
     public void visit(Constraintdef element) {
         //TODO
     }
 
-    @Override
     public void visit(Constraint element) {
         //TODO
     }
 
-    @Override
     public void visit(Constructorsynopsis element) {
         //TODO
     }
 
-    @Override
     public void visit(Contractnum element) {
         //TODO
     }
 
-    @Override
     public void visit(Contractsponsor element) {
         //TODO
     }
 
-    @Override
     public void visit(Contrib element) {
         //TODO
     }
 
-    @Override
     public void visit(Copyright element) {
         //TODO
     }
 
-    @Override
     public void visit(Coref element) {
         //TODO
     }
 
-    @Override
     public void visit(Country element) {
         //TODO
     }
 
-    @Override
     public void visit(Cover element) {
         //TODO
     }
 
-    @Override
     public void visit(Database element) {
         //TODO
     }
 
-    @Override
     public void visit(Date element) {
         //TODO
     }
 
-    @Override
     public void visit(Dedication element) {
         //TODO
     }
 
-    @Override
     public void visit(Destructorsynopsis element) {
         //TODO
     }
 
-    @Override
     public void visit(Edition element) {
         //TODO
     }
 
-    @Override
     public void visit(Editor element) {
         //TODO
     }
 
-    @Override
     public void visit(Email element) {
         //TODO
     }
 
-    @Override
     public void visit(Emphasis element) {
         //TODO
     }
 
-    @Override
     public void visit(Entry element) {
         //TODO
     }
 
-    @Override
     public void visit(Entrytbl element) {
         //TODO
     }
 
-    @Override
     public void visit(Envar element) {
         //TODO
     }
 
-    @Override
     public void visit(Epigraph element) {
         //TODO
     }
 
-    @Override
     public void visit(Equation element) {
         //TODO
     }
 
-    @Override
     public void visit(Errorcode element) {
         //TODO
     }
 
-    @Override
     public void visit(Errorname element) {
         //TODO
     }
 
-    @Override
     public void visit(Errortext element) {
         //TODO
     }
 
-    @Override
     public void visit(Errortype element) {
         //TODO
     }
 
-    @Override
     public void visit(Example element) {
         //TODO
     }
 
-    @Override
     public void visit(Exceptionname element) {
         //TODO
     }
 
-    @Override
     public void visit(Extendedlink element) {
         //TODO
     }
 
-    @Override
     public void visit(Fax element) {
         //TODO
     }
 
-    @Override
     public void visit(Fieldsynopsis element) {
         //TODO
     }
 
-    @Override
     public void visit(Figure element) {
         //TODO
     }
 
-    @Override
     public void visit(Filename element) {
         //TODO
     }
 
-    @Override
     public void visit(Firstname element) {
         //TODO
     }
 
-    @Override
     public void visit(Firstterm element) {
         //TODO
     }
 
-    @Override
     public void visit(Footnote element) {
         //TODO
     }
 
-    @Override
     public void visit(Footnoteref element) {
         //TODO
     }
 
-    @Override
     public void visit(Foreignphrase element) {
         //TODO
     }
 
-    @Override
     public void visit(Formalpara element) {
         //TODO
     }
 
-    @Override
     public void visit(Funcdef element) {
         //TODO
     }
 
-    @Override
     public void visit(Funcparams element) {
         //TODO
     }
 
-    @Override
     public void visit(Funcprototype element) {
         //TODO
     }
 
-    @Override
     public void visit(Funcsynopsisinfo element) {
         //TODO
     }
 
-    @Override
     public void visit(Funcsynopsis element) {
         //TODO
     }
 
-    @Override
     public void visit(Function element) {
         //TODO
     }
 
-    @Override
     public void visit(Glossary element) {
         //TODO
     }
 
-    @Override
     public void visit(Glossdef element) {
         //TODO
     }
 
-    @Override
     public void visit(Glossdiv element) {
         //TODO
     }
 
-    @Override
     public void visit(Glossentry element) {
         //TODO
     }
 
-    @Override
     public void visit(Glosslist element) {
         //TODO
     }
 
-    @Override
     public void visit(Glossseealso element) {
         //TODO
     }
 
-    @Override
     public void visit(Glosssee element) {
         //TODO
     }
 
-    @Override
     public void visit(Glossterm element) {
         //TODO
     }
 
-    @Override
     public void visit(Group element) {
         //TODO
     }
 
-    @Override
     public void visit(Guibutton element) {
         //TODO
     }
 
-    @Override
     public void visit(Guiicon element) {
         //TODO
     }
 
-    @Override
     public void visit(Guilabel element) {
         //TODO
     }
 
-    @Override
     public void visit(Guimenuitem element) {
         //TODO
     }
 
-    @Override
     public void visit(Guimenu element) {
         //TODO
     }
 
-    @Override
     public void visit(Guisubmenu element) {
         //TODO
     }
 
-    @Override
     public void visit(Hardware element) {
         //TODO
     }
 
-    @Override
     public void visit(Holder element) {
         //TODO
     }
 
-    @Override
     public void visit(Honorific element) {
         //TODO
     }
 
-    @Override
     public void visit(Imagedata element) {
         //TODO
     }
 
-    @Override
     public void visit(Imageobjectco element) {
         //TODO
     }
 
-    @Override
     public void visit(Imageobject element) {
         //TODO
     }
 
-    @Override
     public void visit(Important element) {
         //TODO
     }
 
-    @Override
     public void visit(Indexdiv element) {
         //TODO
     }
 
-    @Override
     public void visit(Indexentry element) {
         //TODO
     }
 
-    @Override
     public void visit(Index element) {
         //TODO
     }
 
-    @Override
     public void visit(Indexterm element) {
         //TODO
     }
 
-    @Override
     public void visit(Info info) {
         if (info == null) {
             return;
         }
-        visitTitlesAndTitleabbrevsAndSubtitlesList(info.getTitlesAndTitleabbrevsAndSubtitles());
+        visitObjectList(info.getTitlesAndTitleabbrevsAndSubtitles());
     }
 
-    @Override
     public void visit(Informalequation element) {
         //TODO
     }
 
-    @Override
     public void visit(Informalexample element) {
         //TODO
     }
 
-    @Override
     public void visit(Informalfigure element) {
         //TODO
     }
 
-    @Override
     public void visit(Informaltable element) {
         //TODO
     }
 
-    @Override
     public void visit(Initializer element) {
         //TODO
     }
 
-    @Override
     public void visit(Inlineequation element) {
         //TODO
     }
 
-    @Override
     public void visit(Inlinemediaobject element) {
         //TODO
     }
 
-    @Override
     public void visit(Interfacename element) {
         //TODO
     }
 
-    @Override
     public void visit(Issuenum element) {
         //TODO
     }
 
-    @Override
     public void visit(Itemizedlist element) {
         //TODO
     }
 
-    @Override
     public void visit(Itermset element) {
         //TODO
     }
 
-    @Override
     public void visit(Jobtitle element) {
         //TODO
     }
 
-    @Override
     public void visit(Keycap element) {
         //TODO
     }
 
-    @Override
     public void visit(Keycode element) {
         //TODO
     }
 
-    @Override
     public void visit(Keycombo element) {
         //TODO
     }
 
-    @Override
     public void visit(Keysym element) {
         //TODO
     }
 
-    @Override
     public void visit(Keyword element) {
         //TODO
     }
 
-    @Override
     public void visit(Keywordset element) {
         //TODO
     }
 
-    @Override
     public void visit(Label element) {
         //TODO
     }
 
-    @Override
     public void visit(Legalnotice element) {
         //TODO
     }
 
-    @Override
     public void visit(Lhs element) {
         //TODO
     }
 
-    @Override
     public void visit(Lineage element) {
         //TODO
     }
 
-    @Override
     public void visit(Lineannotation element) {
         //TODO
     }
 
-    @Override
     public void visit(Link element) {
         //TODO
     }
 
-    @Override
     public void visit(Listitem element) {
         //TODO
     }
 
-    @Override
     public void visit(Literal element) {
         //TODO
     }
 
-    @Override
     public void visit(Literallayout element) {
         //TODO
     }
 
-    @Override
     public void visit(Locator element) {
         //TODO
     }
 
-    @Override
     public void visit(Manvolnum element) {
         //TODO
     }
 
-    @Override
     public void visit(Markup element) {
         //TODO
     }
 
-    @Override
     public void visit(Mathphrase element) {
         //TODO
     }
 
-    @Override
     public void visit(Mediaobject element) {
         //TODO
     }
 
-    @Override
     public void visit(Member element) {
         //TODO
     }
 
-    @Override
     public void visit(Menuchoice element) {
         //TODO
     }
 
-    @Override
     public void visit(Methodname element) {
         //TODO
     }
 
-    @Override
     public void visit(Methodparam element) {
         //TODO
     }
 
-    @Override
     public void visit(Methodsynopsis element) {
         //TODO
     }
 
-    @Override
     public void visit(Modifier element) {
         //TODO
     }
 
-    @Override
     public void visit(Mousebutton element) {
         //TODO
     }
 
-    @Override
     public void visit(Msgaud element) {
         //TODO
     }
 
-    @Override
     public void visit(Msgentry element) {
         //TODO
     }
 
-    @Override
     public void visit(Msgexplan element) {
         //TODO
     }
 
-    @Override
     public void visit(Msginfo element) {
         //TODO
     }
 
-    @Override
     public void visit(Msg element) {
         //TODO
     }
 
-    @Override
     public void visit(Msglevel element) {
         //TODO
     }
 
-    @Override
     public void visit(Msgmain element) {
         //TODO
     }
 
-    @Override
     public void visit(Msgorig element) {
         //TODO
     }
 
-    @Override
     public void visit(Msgrel element) {
         //TODO
     }
 
-    @Override
     public void visit(Msgset element) {
         //TODO
     }
 
-    @Override
     public void visit(Msgsub element) {
         //TODO
     }
 
-    @Override
     public void visit(Msgtext element) {
         //TODO
     }
 
-    @Override
     public void visit(Nonterminal element) {
         //TODO
     }
 
-    @Override
     public void visit(Note element) {
         //TODO
     }
 
-    @Override
     public void visit(Olink element) {
         //TODO
     }
 
-    @Override
     public void visit(Ooclass element) {
         //TODO
     }
 
-    @Override
     public void visit(Ooexception element) {
         //TODO
     }
 
-    @Override
     public void visit(Oointerface element) {
         //TODO
     }
 
-    @Override
     public void visit(Optional element) {
         //TODO
     }
 
-    @Override
     public void visit(Option element) {
         //TODO
     }
 
-    @Override
     public void visit(Orderedlist element) {
         //TODO
     }
 
-    @Override
     public void visit(Orgdiv element) {
         //TODO
     }
 
-    @Override
     public void visit(Org element) {
         //TODO
     }
 
-    @Override
     public void visit(Orgname element) {
         //TODO
     }
 
-    @Override
     public void visit(Otheraddr element) {
         //TODO
     }
 
-    @Override
     public void visit(Othercredit element) {
         //TODO
     }
 
-    @Override
     public void visit(Othername element) {
         //TODO
     }
 
-    @Override
     public void visit(Package element) {
         //TODO
     }
 
-    @Override
     public void visit(Pagenums element) {
         //TODO
     }
 
-    @Override
     public void visit(Paramdef element) {
         //TODO
     }
 
-    @Override
     public void visit(Parameter element) {
         //TODO
     }
 
-    @Override
     public void visit(Partintro element) {
         //TODO
     }
 
-    @Override
     public void visit(Part element) {
         //TODO
     }
 
-    @Override
     public void visit(Personblurb element) {
         //TODO
     }
 
-    @Override
     public void visit(Person element) {
         //TODO
     }
 
-    @Override
     public void visit(Personname element) {
         //TODO
     }
 
-    @Override
     public void visit(Phone element) {
         //TODO
     }
 
-    @Override
     public void visit(Phrase element) {
         //TODO
     }
 
-    @Override
     public void visit(Pob element) {
         //TODO
     }
 
-    @Override
     public void visit(Postcode element) {
         //TODO
     }
 
-    @Override
     public void visit(Preface element) {
         //TODO
     }
 
-    @Override
     public void visit(Primaryie element) {
         //TODO
     }
 
-    @Override
     public void visit(Primary element) {
         //TODO
     }
 
-    @Override
     public void visit(Printhistory element) {
         //TODO
     }
 
-    @Override
     public void visit(Procedure element) {
         //TODO
     }
 
-    @Override
     public void visit(Production element) {
         //TODO
     }
 
-    @Override
     public void visit(Productionrecap element) {
         //TODO
     }
 
-    @Override
     public void visit(Productionset element) {
         //TODO
     }
 
-    @Override
     public void visit(Productname element) {
         //TODO
     }
 
-    @Override
     public void visit(Productnumber element) {
         //TODO
     }
 
-    @Override
     public void visit(Programlistingco element) {
         //TODO
     }
 
-    @Override
     public void visit(Programlisting element) {
         //TODO
     }
 
-    @Override
     public void visit(Prompt element) {
         //TODO
     }
 
-    @Override
     public void visit(Property element) {
         //TODO
     }
 
-    @Override
     public void visit(Pubdate element) {
         //TODO
     }
 
-    @Override
     public void visit(Publisher element) {
         //TODO
     }
 
-    @Override
     public void visit(Publishername element) {
         //TODO
     }
 
-    @Override
     public void visit(Qandadiv element) {
         //TODO
     }
 
-    @Override
     public void visit(Qandaentry element) {
         //TODO
     }
 
-    @Override
     public void visit(Qandaset element) {
         //TODO
     }
 
-    @Override
     public void visit(Question element) {
         //TODO
     }
 
-    @Override
     public void visit(Quote element) {
         //TODO
     }
 
-    @Override
     public void visit(Refclass element) {
         //TODO
     }
 
-    @Override
     public void visit(Refdescriptor element) {
         //TODO
     }
 
-    @Override
     public void visit(Refentry element) {
-        //TODO
+        this.visit(element.getInfo());
+        this.visitRefsectionList(element.getRefsections());        
     }
 
-    @Override
     public void visit(Refentrytitle element) {
         //TODO
     }
 
-    @Override
     public void visit(Reference element) {
-        //TODO
+        element.getRefentries();
+        
     }
 
-    @Override
     public void visit(Refmeta element) {
         //TODO
     }
 
-    @Override
     public void visit(Refmiscinfo element) {
         //TODO
     }
 
-    @Override
     public void visit(Refnamediv element) {
         //TODO
     }
 
-    @Override
     public void visit(Refname element) {
         //TODO
     }
 
-    @Override
     public void visit(Refpurpose element) {
         //TODO
     }
 
-    @Override
     public void visit(Refsect1 element) {
         //TODO
     }
 
-    @Override
     public void visit(Refsect2 element) {
         //TODO
     }
 
-    @Override
     public void visit(Refsect3 element) {
         //TODO
     }
 
-    @Override
     public void visit(Refsection element) {
-        //TODO
+        visitObjectList(element.getTitlesAndTitleabbrevsAndSubtitles());
+        visitObjectList(element.getItemizedlistsAndOrderedlistsAndProcedures());
+        visitRefsectionList(element.getRefsections());
     }
 
-    @Override
     public void visit(Refsynopsisdiv element) {
         //TODO
     }
 
-    @Override
     public void visit(Releaseinfo element) {
         //TODO
     }
 
-    @Override
     public void visit(Remark element) {
         //TODO
     }
 
-    @Override
     public void visit(Replaceable element) {
         //TODO
     }
 
-    @Override
     public void visit(Returnvalue element) {
         //TODO
     }
 
-    @Override
     public void visit(Revdescription element) {
         //TODO
     }
 
-    @Override
     public void visit(Revhistory element) {
         //TODO
     }
 
-    @Override
     public void visit(Revision element) {
         //TODO
     }
 
-    @Override
     public void visit(Revnumber element) {
         //TODO
     }
 
-    @Override
     public void visit(Revremark element) {
         //TODO
     }
 
-    @Override
     public void visit(Rhs element) {
         //TODO
     }
 
-    @Override
     public void visit(Row element) {
         //TODO
     }
 
-    @Override
     public void visit(Sbr element) {
         //TODO
     }
 
-    @Override
     public void visit(Screenco element) {
         //TODO
     }
 
-    @Override
     public void visit(Screen element) {
         //TODO
     }
 
-    @Override
     public void visit(Screenshot element) {
         //TODO
     }
 
-    @Override
     public void visit(Secondaryie element) {
         //TODO
     }
 
-    @Override
     public void visit(Secondary element) {
         //TODO
     }
 
-    @Override
     public void visit(Sect1 element) {
         //TODO
     }
 
-    @Override
     public void visit(Sect2 element) {
         //TODO
     }
 
-    @Override
     public void visit(Sect3 element) {
         //TODO
     }
 
-    @Override
     public void visit(Sect4 element) {
         //TODO
     }
 
-    @Override
     public void visit(Sect5 element) {
         //TODO
     }
 
-    @Override
     public void visit(Section element) {
         //TODO
     }
 
-    @Override
     public void visit(Seealsoie element) {
         //TODO
     }
 
-    @Override
     public void visit(Seealso element) {
         //TODO
     }
 
-    @Override
     public void visit(Seeie element) {
         //TODO
     }
 
-    @Override
     public void visit(See element) {
         //TODO
     }
 
-    @Override
     public void visit(Seg element) {
         //TODO
     }
 
-    @Override
     public void visit(Seglistitem element) {
         //TODO
     }
 
-    @Override
     public void visit(Segmentedlist element) {
         //TODO
     }
 
-    @Override
     public void visit(Segtitle element) {
         //TODO
     }
 
-    @Override
     public void visit(Seriesvolnums element) {
         //TODO
     }
 
-    @Override
     public void visit(Setindex element) {
         //TODO
     }
 
-    @Override
     public void visit(Set element) {
         //TODO
     }
 
-    @Override
     public void visit(Shortaffil element) {
         //TODO
     }
 
-    @Override
     public void visit(Shortcut element) {
         //TODO
     }
 
-    @Override
     public void visit(Sidebar element) {
         //TODO
     }
 
-    @Override
     public void visit(Simpara element) {
         //TODO
     }
 
-    @Override
     public void visit(Simplelist element) {
         //TODO
     }
 
-    @Override
     public void visit(Simplemsgentry element) {
         //TODO
     }
 
-    @Override
     public void visit(Simplesect element) {
         //TODO
     }
 
-    @Override
     public void visit(Spanspec element) {
         //TODO
     }
 
-    @Override
     public void visit(State element) {
         //TODO
     }
 
-    @Override
     public void visit(Stepalternatives element) {
         //TODO
     }
 
-    @Override
     public void visit(Step element) {
         //TODO
     }
 
-    @Override
     public void visit(Street element) {
         //TODO
     }
 
-    @Override
     public void visit(Subject element) {
         //TODO
     }
 
-    @Override
     public void visit(Subjectset element) {
         //TODO
     }
 
-    @Override
     public void visit(Subjectterm element) {
         //TODO
     }
 
-    @Override
     public void visit(Subscript element) {
         //TODO
     }
 
-    @Override
     public void visit(Substeps element) {
         //TODO
     }
 
-    @Override
     public void visit(Subtitle element) {
         //TODO
     }
 
-    @Override
     public void visit(Superscript element) {
         //TODO
     }
 
-    @Override
     public void visit(Surname element) {
         //TODO
     }
 
-    @Override
     public void visit(Symbol element) {
         //TODO
     }
 
-    @Override
     public void visit(Synopfragment element) {
         //TODO
     }
 
-    @Override
     public void visit(Synopfragmentref element) {
         //TODO
     }
 
-    @Override
     public void visit(Synopsis element) {
         //TODO
     }
 
-    @Override
     public void visit(Systemitem element) {
         //TODO
     }
 
-    @Override
     public void visit(Table element) {
         //TODO
     }
 
-    @Override
     public void visit(Tag element) {
         //TODO
     }
 
-    @Override
     public void visit(Task element) {
         //TODO
     }
 
-    @Override
     public void visit(Taskprerequisites element) {
         //TODO
     }
 
-    @Override
     public void visit(Taskrelated element) {
         //TODO
     }
 
-    @Override
     public void visit(Tasksummary element) {
         //TODO
     }
 
-    @Override
     public void visit(Tbody element) {
         //TODO
     }
 
-    @Override
     public void visit(Td element) {
         //TODO
     }
 
-    @Override
     public void visit(Termdef element) {
         //TODO
     }
 
-    @Override
     public void visit(Term element) {
         //TODO
     }
 
-    @Override
     public void visit(Tertiaryie element) {
         //TODO
     }
 
-    @Override
     public void visit(Tertiary element) {
         //TODO
     }
 
-    @Override
     public void visit(Textdata element) {
         //TODO
     }
 
-    @Override
     public void visit(Textobject element) {
         //TODO
     }
 
-    @Override
     public void visit(Tfoot element) {
         //TODO
     }
 
-    @Override
     public void visit(Tgroup element) {
         //TODO
     }
 
-    @Override
     public void visit(Thead element) {
         //TODO
     }
 
-    @Override
     public void visit(Th element) {
         //TODO
     }
 
-    @Override
     public void visit(Tip element) {
         //TODO
     }
 
-    @Override
     public void visit(Titleabbrev element) {
         //TODO
     }
 
-    @Override
     public void visit(Tocdiv element) {
         //TODO
     }
 
-    @Override
     public void visit(Tocentry element) {
         //TODO
     }
 
-    @Override
     public void visit(Toc element) {
         //TODO
     }
 
-    @Override
     public void visit(Token element) {
         //TODO
     }
 
-    @Override
     public void visit(Trademark element) {
         //TODO
     }
 
-    @Override
     public void visit(Tr element) {
         //TODO
     }
 
-    @Override
     public void visit(Type element) {
         //TODO
     }
 
-    @Override
     public void visit(Uri element) {
         //TODO
     }
 
-    @Override
     public void visit(Userinput element) {
         //TODO
     }
 
-    @Override
     public void visit(Varargs element) {
         //TODO
     }
 
-    @Override
     public void visit(Variablelist element) {
         //TODO
     }
 
-    @Override
     public void visit(Varlistentry element) {
         //TODO
     }
 
-    @Override
     public void visit(Varname element) {
         //TODO
     }
 
-    @Override
     public void visit(Videodata element) {
         //TODO
     }
 
-    @Override
     public void visit(Videoobject element) {
         //TODO
     }
 
-    @Override
     public void visit(Void element) {
         //TODO
     }
 
-    @Override
     public void visit(Volumenum element) {
         //TODO
     }
 
-    @Override
     public void visit(Warning element) {
         //TODO
     }
 
-    @Override
     public void visit(Wordasword element) {
         //TODO
     }
 
-    @Override
     public void visit(Xref element) {
         //TODO
     }
 
-    @Override
     public void visit(Year year) {
         //TODO
     }
