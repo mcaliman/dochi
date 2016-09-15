@@ -426,6 +426,7 @@ public class Visitor implements VisitorInterface {
 
     @Override
     public void visit(Title title) {
+        print("Title:");
         List<Object> list = title.getContent();
         for (Object object : list) {
             if (object instanceof String) {
@@ -573,6 +574,452 @@ public class Visitor implements VisitorInterface {
             logger.log(Level.SEVERE, null, ex);
         }
         return article;
+    }
+
+    //Experiment: show how to remove multiple if (severals if) and instanceof? (List<Object> is the prob.)
+    public void visitElement(Object element) {
+        if (element instanceof Abbrev) {
+        } else if (element instanceof Abstract) {
+            visit((Abstract)element);
+        } else if (element instanceof Accel) {
+            visit((Accel)element);
+        } else if (element instanceof Acknowledgements) {
+            visit((Acknowledgements)element);
+        } else if (element instanceof Acronym) {
+            visit((Acronym)element);
+        } else if (element instanceof Address) {
+            visit((Address)element);
+        } else if (element instanceof Affiliation) {
+            visit((Affiliation) element);
+        } else if (element instanceof Alt) {
+            visit((Alt) element);
+        } else if (element instanceof Anchor) {
+             visit((Anchor) element);
+        } else if (element instanceof Annotation) {
+            visit((Annotation) element);
+        } else if (element instanceof Answer) {
+             visit((Answer) element);
+        } else if (element instanceof Appendix) {
+            visit((Appendix) element);
+        } else if (element instanceof Application) {
+            visit((Application) element);
+        } else if (element instanceof Arc) {
+            visit((Arc) element);
+        } else if (element instanceof Area) {
+            visit((Area) element);
+        } else if (element instanceof Areaset) {
+            visit((Areaset) element);
+        } else if (element instanceof Areaspec) {
+            visit((Areaspec) element);
+        } else if (element instanceof Arg) {
+            visit((Arg) element);
+        } else if (element instanceof Article) {
+            visit((Article) element);
+        } else if (element instanceof Artpagenums) {
+            visit((Artpagenums) element);
+        } else if (element instanceof Attribution) {
+            visit((Attribution) element);
+        } else if (element instanceof Audiodata) {
+            visit((Audiodata) element);
+        } else if (element instanceof Audioobject) {
+            visit((Audioobject) element);
+        } else if (element instanceof Author) {
+            visit((Author) element);
+        } else if (element instanceof Authorgroup) {
+            visit((Authorgroup) element);
+        } else if (element instanceof Authorinitials) {
+            visit((Authorinitials) element);
+        } else if (element instanceof Bibliocoverage) {
+            visit((Bibliocoverage) element);
+        } else if (element instanceof Bibliodiv) {
+            visit((Bibliodiv) element);
+        } else if (element instanceof Biblioentry) {
+            visit((Biblioentry) element);
+        } else if (element instanceof Bibliography) {
+            visit((Bibliography) element);
+        } else if (element instanceof Biblioid) {
+            visit((Biblioid) element);
+        } else if (element instanceof Bibliolist) {
+            visit((Biblioid) element);
+        } else if (element instanceof Bibliomisc) {
+            visit((Bibliomisc) element);
+        } else if (element instanceof Bibliomixed) {
+            visit((Bibliomixed) element);
+        } else if (element instanceof Bibliomset) {
+            visit((Bibliomset) element);
+        } else if (element instanceof Biblioref) {
+            visit((Biblioref) element);
+        } else if (element instanceof Bibliorelation) {
+            visit((Bibliorelation) element);
+        } else if (element instanceof Biblioset) {
+            visit((Biblioset) element);
+        } else if (element instanceof Bibliosource) {
+            visit((Bibliosource) element);
+        } else if (element instanceof Blockquote) {
+            visit((Blockquote) element);
+        } else if (element instanceof Book) {
+            visit((Book) element);
+        } else if (element instanceof Bridgehead) {
+            visit((Bridgehead) element);
+        } else if (element instanceof Callout) {
+            visit((Callout) element);
+        } else if (element instanceof Calloutlist) {
+            visit((Calloutlist) element);
+        } else if (element instanceof Caption) {
+            visit((Caption) element);
+        } else if (element instanceof Caution) {
+            visit((Caution) element);
+        } else if (element instanceof Chapter) {
+            visit((Chapter) element);
+        } else if (element instanceof Citation) {
+            visit((Citation) element);
+        } else if (element instanceof Citebiblioid) {
+            visit((Citebiblioid) element);
+        } else if (element instanceof Citerefentry) {
+            visit((Citerefentry) element);
+        } else if (element instanceof Citetitle) {
+            visit((Citetitle) element);
+        } else if (element instanceof City) {
+            visit((City) element);
+        } else if (element instanceof Classname) {
+            visit((Classname) element);
+        } else if (element instanceof Classsynopsis) {
+            visit((Classsynopsis) element);
+        } else if (element instanceof Classsynopsisinfo) {
+            visit((Classsynopsisinfo) element);
+        } else if (element instanceof Cmdsynopsis) {
+            visit((Cmdsynopsis) element);
+        } else if (element instanceof Co) {
+            visit((Co) element);
+        } else if (element instanceof Code) {
+            visit((Code) element);
+        } else if (element instanceof Col) {
+            visit((Col) element);
+        } else if (element instanceof Colgroup) {
+            visit((Colgroup) element);
+        } else if (element instanceof Collab) {
+            visit((Collab) element);
+        } else if (element instanceof Colophon) {
+            visit((Colophon) element);
+        } else if (element instanceof Colspec) {
+            visit((Colspec) element);
+        } else if (element instanceof Command) {
+            visit((Command) element);
+        } else if (element instanceof Computeroutput) {
+            visit((Computeroutput) element);
+        } else if (element instanceof Confdates) {
+            visit((Confdates) element);
+        } else if (element instanceof Confgroup) {
+            visit((Confgroup) element);
+        } else if (element instanceof Confnum) {
+            visit((Confnum) element);
+        } else if (element instanceof Confsponsor) {
+            visit((Confsponsor) element);
+        } else if (element instanceof Conftitle) {
+            visit((Conftitle) element);
+        } else if (element instanceof Constant) {
+            visit((Constant) element);
+        } else if (element instanceof Constraint) {
+            visit((Constraint) element);
+        } else if (element instanceof Constraintdef) {
+            visit((Constraintdef) element);
+        } else if (element instanceof Constructorsynopsis) {
+            visit((Constructorsynopsis) element);
+        } else if (element instanceof Contractnum) {
+            visit((Contractnum) element);
+        } else if (element instanceof Contractsponsor) {
+            visit((Contractsponsor) element);
+        } else if (element instanceof Contrib) {
+            visit((Contrib) element);
+        } else if (element instanceof Copyright) {
+            visit((Copyright) element);
+        } else if (element instanceof Coref) {
+            visit((Coref) element);
+        } else if (element instanceof Country) {
+            visit((Country) element);
+        } else if (element instanceof Cover) {
+        } else if (element instanceof Database) {
+        } else if (element instanceof Date) {
+        } else if (element instanceof Dedication) {
+        } else if (element instanceof Destructorsynopsis) {
+        } else if (element instanceof Edition) {
+        } else if (element instanceof Editor) {
+        } else if (element instanceof Email) {
+        } else if (element instanceof Emphasis) {
+        } else if (element instanceof Entry) {
+        } else if (element instanceof Entrytbl) {
+        } else if (element instanceof Envar) {
+        } else if (element instanceof Epigraph) {
+        } else if (element instanceof Equation) {
+        } else if (element instanceof Errorcode) {
+        } else if (element instanceof Errorname) {
+        } else if (element instanceof Errortext) {
+        } else if (element instanceof Errortype) {
+        } else if (element instanceof Example) {
+        } else if (element instanceof Exceptionname) {
+        } else if (element instanceof Extendedlink) {
+        } else if (element instanceof Fax) {
+        } else if (element instanceof Fieldsynopsis) {
+        } else if (element instanceof Figure) {
+        } else if (element instanceof Filename) {
+        } else if (element instanceof Firstname) {
+        } else if (element instanceof Firstterm) {
+        } else if (element instanceof Footnote) {
+        } else if (element instanceof Footnoteref) {
+        } else if (element instanceof Foreignphrase) {
+        } else if (element instanceof Formalpara) {
+        } else if (element instanceof Funcdef) {
+        } else if (element instanceof Funcparams) {
+        } else if (element instanceof Funcprototype) {
+        } else if (element instanceof Funcsynopsis) {
+        } else if (element instanceof Funcsynopsisinfo) {
+        } else if (element instanceof Function) {
+        } else if (element instanceof Glossary) {
+        } else if (element instanceof Glossdef) {
+        } else if (element instanceof Glossdiv) {
+        } else if (element instanceof Glossentry) {
+        } else if (element instanceof Glosslist) {
+        } else if (element instanceof Glosssee) {
+        } else if (element instanceof Glossseealso) {
+        } else if (element instanceof Glossterm) {
+        } else if (element instanceof Group) {
+        } else if (element instanceof Guibutton) {
+        } else if (element instanceof Guiicon) {
+        } else if (element instanceof Guilabel) {
+        } else if (element instanceof Guimenu) {
+        } else if (element instanceof Guimenuitem) {
+        } else if (element instanceof Guisubmenu) {
+        } else if (element instanceof Hardware) {
+        } else if (element instanceof Holder) {
+        } else if (element instanceof Honorific) {
+        } else if (element instanceof Imagedata) {
+        } else if (element instanceof Imageobject) {
+        } else if (element instanceof Imageobjectco) {
+        } else if (element instanceof Important) {
+        } else if (element instanceof Index) {
+        } else if (element instanceof Indexdiv) {
+        } else if (element instanceof Indexentry) {
+        } else if (element instanceof Indexterm) {
+        } else if (element instanceof Info) {
+        } else if (element instanceof Informalequation) {
+        } else if (element instanceof Informalexample) {
+        } else if (element instanceof Informalfigure) {
+        } else if (element instanceof Informaltable) {
+        } else if (element instanceof Initializer) {
+        } else if (element instanceof Inlineequation) {
+        } else if (element instanceof Inlinemediaobject) {
+        } else if (element instanceof Interfacename) {
+        } else if (element instanceof Issuenum) {
+        } else if (element instanceof Itemizedlist) {
+        } else if (element instanceof Itermset) {
+        } else if (element instanceof Jobtitle) {
+        } else if (element instanceof Keycap) {
+        } else if (element instanceof Keycode) {
+        } else if (element instanceof Keycombo) {
+        } else if (element instanceof Keysym) {
+        } else if (element instanceof Keyword) {
+        } else if (element instanceof Keywordset) {
+        } else if (element instanceof Label) {
+        } else if (element instanceof Legalnotice) {
+        } else if (element instanceof Lhs) {
+        } else if (element instanceof Lineage) {
+        } else if (element instanceof Lineannotation) {
+        } else if (element instanceof Link) {
+        } else if (element instanceof Listitem) {
+        } else if (element instanceof Literal) {
+        } else if (element instanceof Literallayout) {
+        } else if (element instanceof Locator) {
+        } else if (element instanceof Manvolnum) {
+        } else if (element instanceof Markup) {
+        } else if (element instanceof Mathphrase) {
+        } else if (element instanceof Mediaobject) {
+        } else if (element instanceof Member) {
+        } else if (element instanceof Menuchoice) {
+        } else if (element instanceof Methodname) {
+        } else if (element instanceof Methodparam) {
+        } else if (element instanceof Methodsynopsis) {
+        } else if (element instanceof Modifier) {
+        } else if (element instanceof Mousebutton) {
+        } else if (element instanceof Msg) {
+        } else if (element instanceof Msgaud) {
+        } else if (element instanceof Msgentry) {
+        } else if (element instanceof Msgexplan) {
+        } else if (element instanceof Msginfo) {
+        } else if (element instanceof Msglevel) {
+        } else if (element instanceof Msgmain) {
+        } else if (element instanceof Msgorig) {
+        } else if (element instanceof Msgrel) {
+        } else if (element instanceof Msgset) {
+        } else if (element instanceof Msgsub) {
+        } else if (element instanceof Msgtext) {
+        } else if (element instanceof Nonterminal) {
+        } else if (element instanceof Note) {
+        } else if (element instanceof Olink) {
+        } else if (element instanceof Ooclass) {
+        } else if (element instanceof Ooexception) {
+        } else if (element instanceof Oointerface) {
+        } else if (element instanceof Option) {
+        } else if (element instanceof Optional) {
+        } else if (element instanceof Orderedlist) {
+        } else if (element instanceof Org) {
+        } else if (element instanceof Orgdiv) {
+        } else if (element instanceof Orgname) {
+        } else if (element instanceof Otheraddr) {
+        } else if (element instanceof Othercredit) {
+        } else if (element instanceof Othername) {
+        } else if (element instanceof Pagenums) {
+        } else if (element instanceof Para) {
+        } else if (element instanceof Paramdef) {
+        } else if (element instanceof Parameter) {
+        } else if (element instanceof Part) {
+        } else if (element instanceof Partintro) {
+        } else if (element instanceof Person) {
+        } else if (element instanceof Personblurb) {
+        } else if (element instanceof Personname) {
+        } else if (element instanceof Phone) {
+        } else if (element instanceof Phrase) {
+        } else if (element instanceof Pob) {
+        } else if (element instanceof Postcode) {
+        } else if (element instanceof Preface) {
+        } else if (element instanceof Primary) {
+        } else if (element instanceof Primaryie) {
+        } else if (element instanceof Printhistory) {
+        } else if (element instanceof Procedure) {
+        } else if (element instanceof Production) {
+        } else if (element instanceof Productionrecap) {
+        } else if (element instanceof Productionset) {
+        } else if (element instanceof Productname) {
+        } else if (element instanceof Productnumber) {
+        } else if (element instanceof Programlisting) {
+        } else if (element instanceof Programlistingco) {
+        } else if (element instanceof Prompt) {
+        } else if (element instanceof Property) {
+        } else if (element instanceof Pubdate) {
+        } else if (element instanceof Publisher) {
+        } else if (element instanceof Publishername) {
+        } else if (element instanceof Qandadiv) {
+        } else if (element instanceof Qandaentry) {
+        } else if (element instanceof Qandaset) {
+        } else if (element instanceof Question) {
+        } else if (element instanceof Quote) {
+        } else if (element instanceof Refclass) {
+        } else if (element instanceof Refdescriptor) {
+        } else if (element instanceof Refentry) {
+        } else if (element instanceof Refentrytitle) {
+        } else if (element instanceof Reference) {
+        } else if (element instanceof Refmeta) {
+        } else if (element instanceof Refmiscinfo) {
+        } else if (element instanceof Refname) {
+        } else if (element instanceof Refnamediv) {
+        } else if (element instanceof Refpurpose) {
+        } else if (element instanceof Refsect1) {
+        } else if (element instanceof Refsect2) {
+        } else if (element instanceof Refsect3) {
+        } else if (element instanceof Refsection) {
+        } else if (element instanceof Refsynopsisdiv) {
+        } else if (element instanceof Releaseinfo) {
+        } else if (element instanceof Remark) {
+        } else if (element instanceof Replaceable) {
+        } else if (element instanceof Returnvalue) {
+        } else if (element instanceof Revdescription) {
+        } else if (element instanceof Revhistory) {
+        } else if (element instanceof Revision) {
+        } else if (element instanceof Revnumber) {
+        } else if (element instanceof Revremark) {
+        } else if (element instanceof Rhs) {
+        } else if (element instanceof Row) {
+        } else if (element instanceof Sbr) {
+        } else if (element instanceof Screen) {
+        } else if (element instanceof Screenco) {
+        } else if (element instanceof Screenshot) {
+        } else if (element instanceof Secondary) {
+        } else if (element instanceof Secondaryie) {
+        } else if (element instanceof Sect1) {
+        } else if (element instanceof Sect2) {
+        } else if (element instanceof Sect3) {
+        } else if (element instanceof Sect4) {
+        } else if (element instanceof Sect5) {
+        } else if (element instanceof Section) {
+        } else if (element instanceof See) {
+        } else if (element instanceof Seealso) {
+        } else if (element instanceof Seealsoie) {
+        } else if (element instanceof Seeie) {
+        } else if (element instanceof Seg) {
+        } else if (element instanceof Seglistitem) {
+        } else if (element instanceof Segmentedlist) {
+        } else if (element instanceof Segtitle) {
+        } else if (element instanceof Seriesvolnums) {
+        } else if (element instanceof Set) {
+        } else if (element instanceof Setindex) {
+        } else if (element instanceof Shortaffil) {
+        } else if (element instanceof Shortcut) {
+        } else if (element instanceof Sidebar) {
+        } else if (element instanceof Simpara) {
+        } else if (element instanceof Simplelist) {
+        } else if (element instanceof Simplemsgentry) {
+        } else if (element instanceof Simplesect) {
+        } else if (element instanceof Spanspec) {
+        } else if (element instanceof State) {
+        } else if (element instanceof Step) {
+        } else if (element instanceof Stepalternatives) {
+        } else if (element instanceof Street) {
+        } else if (element instanceof Subject) {
+        } else if (element instanceof Subjectset) {
+        } else if (element instanceof Subjectterm) {
+        } else if (element instanceof Subscript) {
+        } else if (element instanceof Substeps) {
+        } else if (element instanceof Subtitle) {
+        } else if (element instanceof Superscript) {
+        } else if (element instanceof Surname) {
+        } else if (element instanceof Symbol) {
+        } else if (element instanceof Synopfragment) {
+        } else if (element instanceof Synopfragmentref) {
+        } else if (element instanceof Synopsis) {
+        } else if (element instanceof Systemitem) {
+        } else if (element instanceof Table) {
+        } else if (element instanceof Tag) {
+        } else if (element instanceof Task) {
+        } else if (element instanceof Taskprerequisites) {
+        } else if (element instanceof Taskrelated) {
+        } else if (element instanceof Tasksummary) {
+        } else if (element instanceof Tbody) {
+        } else if (element instanceof Td) {
+        } else if (element instanceof Term) {
+        } else if (element instanceof Termdef) {
+        } else if (element instanceof Tertiary) {
+        } else if (element instanceof Tertiaryie) {
+        } else if (element instanceof Textdata) {
+        } else if (element instanceof Textobject) {
+        } else if (element instanceof Tfoot) {
+        } else if (element instanceof Tgroup) {
+        } else if (element instanceof Th) {
+        } else if (element instanceof Thead) {
+        } else if (element instanceof Tip) {
+        } else if (element instanceof Title) {
+            visit((Title) element);
+        } else if (element instanceof Titleabbrev) {
+        } else if (element instanceof Toc) {
+        } else if (element instanceof Tocdiv) {
+        } else if (element instanceof Tocentry) {
+        } else if (element instanceof Token) {
+        } else if (element instanceof Tr) {
+        } else if (element instanceof Trademark) {
+        } else if (element instanceof Type) {
+        } else if (element instanceof Uri) {
+        } else if (element instanceof Userinput) {
+        } else if (element instanceof Varargs) {
+        } else if (element instanceof Variablelist) {
+        } else if (element instanceof Varlistentry) {
+        } else if (element instanceof Varname) {
+        } else if (element instanceof Videodata) {
+        } else if (element instanceof Videoobject) {
+        } else if (element instanceof Volumenum) {
+        } else if (element instanceof Warning) {
+        } else if (element instanceof Wordasword) {
+        } else if (element instanceof Xref) {
+        } else if (element instanceof Year) {
+        }
+
     }
 
     @Override
