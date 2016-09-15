@@ -1891,7 +1891,7 @@ public class Visitor {
     }
 
     public void visit(Partintro element) {
-        print("Partinto");
+        print("Partinto:");
     }
 
     public void visit(Part element) {
