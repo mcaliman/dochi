@@ -496,11 +496,13 @@ public class PrintDocbookVisitor extends AbstractDocbookVisitor {
     }
 
     public void visit(Abbrev abbrev) {
-        //TODO
+        this.visitObjectList(abbrev.getContent());
     }
 
     public void visit(Abstract abstr) {
-        //TODO
+        this.visit(abstr.getInfo());
+        this.visitObjectList(abstr.getTitlesAndTitleabbrevs());
+        this.visitObjectList(abstr.getAnchorsAndParasAndFormalparas());                
     }
 
     public void visit(Accel accel) {
