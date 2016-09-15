@@ -1129,6 +1129,6 @@ public interface VisitorInterface {
 
     public void visit(Xref element);
 
-    public void visit(Year element);
+    public void visit(Year year);
 
 }
