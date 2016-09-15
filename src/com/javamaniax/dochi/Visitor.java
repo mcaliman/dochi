@@ -429,9 +429,10 @@ public class Visitor implements VisitorInterface {
         print("Title:");
         List<Object> list = title.getContent();
         for (Object object : list) {
-            if (object instanceof String) {
-                visit((String) object);
-            }
+            visitElement(object);
+            /*if (object instanceof String) {
+             visit((String) object);
+             }*/
         }
     }
 
@@ -447,26 +448,30 @@ public class Visitor implements VisitorInterface {
 
     @Override
     public void visitTitlesAndTitleabbrevsAndSubtitles(Object object) {
-        if (object instanceof Title) {
-            visit((Title) object);
-        }
+        /*if (object instanceof Title) {
+         visit((Title) object);
+         }*/
+        visitElement(object);
     }
 
     @Override
     public void visit(Para para) {
+        print("Para:");
         this.numberOfPara++;
-        String id = para.getId();
+        //String id = para.getId();
         //System.out.println("para_id:" + id);
         List<Object> list = para.getContent();
         for (Object object : list) {
-            if (object instanceof String) {
-                visit((String) object);
-            }
+            /*if (object instanceof String) {
+             visit((String) object);
+             }*/
+            visitElement(object);
         }
     }
 
     @Override
     public void visit(Chapter chapter) {
+        print("Chapter:");
         this.numberOfChapters++;
         String id = chapter.getId();
         //System.out.println("chapter_id:" + id);
@@ -483,11 +488,13 @@ public class Visitor implements VisitorInterface {
 
     @Override
     public void visitGlossariesAndBibliographiesAndIndices(Object object) {
-        if (object instanceof Chapter) {
-            visit((Chapter) object);
-        } else if (object instanceof Para) {
-            visit((Para) object);
-        }
+        /*if (object instanceof Chapter) {
+         visit((Chapter) object);
+         } else if (object instanceof Para) {
+         visit((Para) object);
+         }*/
+
+        visitElement(object);
     }
 
     @Override
@@ -580,25 +587,25 @@ public class Visitor implements VisitorInterface {
     public void visitElement(Object element) {
         if (element instanceof Abbrev) {
         } else if (element instanceof Abstract) {
-            visit((Abstract)element);
+            visit((Abstract) element);
         } else if (element instanceof Accel) {
-            visit((Accel)element);
+            visit((Accel) element);
         } else if (element instanceof Acknowledgements) {
-            visit((Acknowledgements)element);
+            visit((Acknowledgements) element);
         } else if (element instanceof Acronym) {
-            visit((Acronym)element);
+            visit((Acronym) element);
         } else if (element instanceof Address) {
-            visit((Address)element);
+            visit((Address) element);
         } else if (element instanceof Affiliation) {
             visit((Affiliation) element);
         } else if (element instanceof Alt) {
             visit((Alt) element);
         } else if (element instanceof Anchor) {
-             visit((Anchor) element);
+            visit((Anchor) element);
         } else if (element instanceof Annotation) {
             visit((Annotation) element);
         } else if (element instanceof Answer) {
-             visit((Answer) element);
+            visit((Answer) element);
         } else if (element instanceof Appendix) {
             visit((Appendix) element);
         } else if (element instanceof Application) {
@@ -869,6 +876,7 @@ public class Visitor implements VisitorInterface {
         } else if (element instanceof Othername) {
         } else if (element instanceof Pagenums) {
         } else if (element instanceof Para) {
+            visit((Para) element);
         } else if (element instanceof Paramdef) {
         } else if (element instanceof Parameter) {
         } else if (element instanceof Part) {
@@ -1018,6 +1026,8 @@ public class Visitor implements VisitorInterface {
         } else if (element instanceof Wordasword) {
         } else if (element instanceof Xref) {
         } else if (element instanceof Year) {
+        } else if (element instanceof String) {
+            visit((String) element);
         }
 
     }
