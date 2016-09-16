@@ -437,40 +437,35 @@ public class PrintDocbookVisitor extends AbstractDocbookVisitor {
         String arcrole = book.getArcrole();
         String audience = book.getAudience();
         String base = book.getBase();
-        book.getCommonRevision();
-
+        String commonRevision = book.getCommonRevision();
         String commonVersion = book.getCommonVersion();
-
-        book.getCondition();
-        book.getConformance();
-        book.getDir();
-        this.visitObjectList(book.getTitlesAndTitleabbrevsAndSubtitles());
-        this.visitObjectList(book.getGlossariesAndBibliographiesAndIndices());
-
-        book.getHref();
-
+        String condition = book.getCondition();
+        String conformance = book.getConformance();
+        String dir = book.getDir();
+        String href = book.getHref();
         String id = book.getId();
-
+        String label=book.getLabel();
+        Object linkend = book.getLinkend();
+        String os = book.getOs();
+        String remap = book.getRemap();
+        String revisionflag = book.getRevisionflag();
+        String role = book.getRole();
+        String security = book.getSecurity();
+        String show = book.getShow();
+        String status = book.getStatus();
+        String userlevel = book.getUserlevel();
+        String vendor = book.getVendor();
+        String wordsize = book.getWordsize();
+        String xlinkRole = book.getXlinkRole();
+        String xlinkTitle = book.getXlinkTitle();
+        String xlinkType = book.getXlinkType();
+        String xmlLang = book.getXmlLang();
+        String xreflabel = book.getXreflabel();
+        
         visit(book.getInfo());
-
-        book.getLabel();
-        book.getLinkend();
-        book.getOs();
-        book.getRemap();
-        book.getRevisionflag();
-        book.getRole();
-        book.getSecurity();
-        book.getShow();
-        book.getStatus();
-
-        book.getUserlevel();
-        book.getVendor();
-        book.getWordsize();
-        book.getXlinkRole();
-        book.getXlinkTitle();
-        book.getXlinkType();
-        book.getXmlLang();
-        book.getXreflabel();
+        visitObjectList(book.getTitlesAndTitleabbrevsAndSubtitles());
+        visitObjectList(book.getGlossariesAndBibliographiesAndIndices());
+        
         //TODO Complete counters
         System.out.println("=========================================");
         System.out.println("Number Of Chapters:" + this.numberOfChapters);
@@ -502,11 +497,12 @@ public class PrintDocbookVisitor extends AbstractDocbookVisitor {
     public void visit(Abstract abstr) {
         this.visit(abstr.getInfo());
         this.visitObjectList(abstr.getTitlesAndTitleabbrevs());
-        this.visitObjectList(abstr.getAnchorsAndParasAndFormalparas());                
+        this.visitObjectList(abstr.getAnchorsAndParasAndFormalparas());
     }
 
     public void visit(Accel accel) {
-        //TODO
+        print("Accel");
+        visitObjectList(accel.getContent());
     }
 
     public void visit(Acknowledgements acknowledgements) {
