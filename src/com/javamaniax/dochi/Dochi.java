@@ -33,14 +33,14 @@ import java.io.IOException;
 public class Dochi {
 
     public static void main(String[] args) throws IOException {
-        //PrintDocbookVisitor visitor = new PrintDocbookVisitor();
+        PrintDocbookVisitor visitor = new PrintDocbookVisitor();
         //visitor.visitBookFile(new File("/home/mcaliman/NetBeansProjects/dochi/docbook5/bookexample1.xml"));
         
-        //visitor = new PrintDocbookVisitor();
-        //visitor.visitBookFile(new File("/home/mcaliman/NetBeansProjects/dochi/docbook5/refentry.007.ns.xml"));
+        visitor = new PrintDocbookVisitor();
+        visitor.visitBookFile(new File("/home/mcaliman/NetBeansProjects/dochi/docbook5/refentry.007.ns.xml"));
         
-        PrintBookAttributeDocbookVisitor visitor1 = new PrintBookAttributeDocbookVisitor();
-        visitor1.visitBookFile(new File("/home/mcaliman/NetBeansProjects/dochi/docbook5/refentry.007.ns.xml"));
+        //PrintBookAttributeDocbookVisitor visitor1 = new PrintBookAttributeDocbookVisitor();
+        //visitor1.visitBookFile(new File("/home/mcaliman/NetBeansProjects/dochi/docbook5/refentry.007.ns.xml"));
         
     }
 

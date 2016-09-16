@@ -446,6 +446,9 @@ public abstract class AbstractDocbookVisitor {
         }
     }
 
+    
+ 
+    //TODO Classical example need Chain-of-responsibility pattern!!!! (next release)
     public void visitElement(Object element) {
         if (element instanceof Abbrev) {
         } else if (element instanceof Abstract) {
@@ -625,99 +628,189 @@ public abstract class AbstractDocbookVisitor {
         } else if (element instanceof Emphasis) {
             visit((Emphasis) element);
         } else if (element instanceof Entry) {
+            visit((Entry) element);
         } else if (element instanceof Entrytbl) {
+            visit((Entrytbl) element);
         } else if (element instanceof Envar) {
+            visit((Envar) element);
         } else if (element instanceof Epigraph) {
+            visit((Epigraph) element);
         } else if (element instanceof Equation) {
+            visit((Equation) element);
         } else if (element instanceof Errorcode) {
+            visit((Errorcode) element);
         } else if (element instanceof Errorname) {
+            visit((Errorname) element);
         } else if (element instanceof Errortext) {
+            visit((Errortext) element);
         } else if (element instanceof Errortype) {
+            visit((Errortype) element);
         } else if (element instanceof Example) {
+            visit((Example) element);
         } else if (element instanceof Exceptionname) {
+            visit((Exceptionname) element);
         } else if (element instanceof Extendedlink) {
+            visit((Extendedlink) element);
         } else if (element instanceof Fax) {
+            visit((Fax) element);
         } else if (element instanceof Fieldsynopsis) {
+            visit((Fieldsynopsis) element);
         } else if (element instanceof Figure) {
+            visit((Figure) element);
         } else if (element instanceof Filename) {
+            visit((Filename) element);
         } else if (element instanceof Firstname) {
+            visit((Firstname) element);
         } else if (element instanceof Firstterm) {
+            visit((Firstterm) element);
         } else if (element instanceof Footnote) {
+            visit((Footnote) element);
         } else if (element instanceof Footnoteref) {
+            visit((Footnoteref) element);
         } else if (element instanceof Foreignphrase) {
+            visit((Foreignphrase) element);
         } else if (element instanceof Formalpara) {
+            visit((Formalpara) element);
         } else if (element instanceof Funcdef) {
+            visit((Funcdef) element);
         } else if (element instanceof Funcparams) {
+            visit((Funcparams) element);
         } else if (element instanceof Funcprototype) {
+            visit((Funcprototype) element);
         } else if (element instanceof Funcsynopsis) {
+            visit((Funcsynopsis) element);
         } else if (element instanceof Funcsynopsisinfo) {
+            visit((Funcsynopsisinfo) element);
         } else if (element instanceof Function) {
+            visit((Function) element);
         } else if (element instanceof Glossary) {
+            visit((Glossary) element);
         } else if (element instanceof Glossdef) {
+            visit((Glossdef) element);
         } else if (element instanceof Glossdiv) {
+            visit((Glossdiv) element);
         } else if (element instanceof Glossentry) {
+            visit((Glossentry) element);
         } else if (element instanceof Glosslist) {
+            visit((Glosslist) element);
         } else if (element instanceof Glosssee) {
+            visit((Glosssee) element);
         } else if (element instanceof Glossseealso) {
+            visit((Glossseealso) element);
         } else if (element instanceof Glossterm) {
+            visit((Glossterm) element);
         } else if (element instanceof Group) {
+            visit((Group) element);
         } else if (element instanceof Guibutton) {
+            visit((Guibutton) element);
         } else if (element instanceof Guiicon) {
+            visit((Guiicon) element);
         } else if (element instanceof Guilabel) {
+            visit((Guilabel) element);
         } else if (element instanceof Guimenu) {
+            visit((Guimenu) element);
         } else if (element instanceof Guimenuitem) {
+            visit((Guimenuitem) element);
         } else if (element instanceof Guisubmenu) {
+            visit((Guisubmenu) element);
         } else if (element instanceof Hardware) {
+            visit((Hardware) element);
         } else if (element instanceof Holder) {
+            visit((Holder) element);
         } else if (element instanceof Honorific) {
+            visit((Honorific) element);
         } else if (element instanceof Imagedata) {
+            visit((Imagedata) element);
         } else if (element instanceof Imageobject) {
+            visit((Imageobject) element);
         } else if (element instanceof Imageobjectco) {
+            visit((Imageobjectco) element);
         } else if (element instanceof Important) {
+            visit((Important) element);
         } else if (element instanceof Index) {
             visit((Index) element);
         } else if (element instanceof Indexdiv) {
+            visit((Indexdiv) element);
         } else if (element instanceof Indexentry) {
+            visit((Indexentry) element);
         } else if (element instanceof Indexterm) {
+            visit((Indexterm) element);
         } else if (element instanceof Info) {
             visit((Info) element);
         } else if (element instanceof Informalequation) {
+            visit((Informalequation) element);
         } else if (element instanceof Informalexample) {
+            visit((Informalexample) element);
         } else if (element instanceof Informalfigure) {
+            visit((Informalfigure) element);
         } else if (element instanceof Informaltable) {
+            visit((Informaltable) element);
         } else if (element instanceof Initializer) {
+            visit((Initializer) element);
         } else if (element instanceof Inlineequation) {
+            visit((Inlineequation) element);
         } else if (element instanceof Inlinemediaobject) {
+            visit((Inlinemediaobject) element);
         } else if (element instanceof Interfacename) {
+            visit((Interfacename) element);
         } else if (element instanceof Issuenum) {
+            visit((Issuenum) element);
         } else if (element instanceof Itemizedlist) {
+            visit((Itemizedlist) element);
         } else if (element instanceof Itermset) {
+            visit((Itermset) element);
         } else if (element instanceof Jobtitle) {
+            visit((Jobtitle) element);
         } else if (element instanceof Keycap) {
+            visit((Keycap) element);
         } else if (element instanceof Keycode) {
+            visit((Keycode) element);
         } else if (element instanceof Keycombo) {
+            visit((Keycombo) element);
         } else if (element instanceof Keysym) {
+            visit((Keysym) element);
         } else if (element instanceof Keyword) {
+            visit((Keyword) element);
         } else if (element instanceof Keywordset) {
+            visit((Keywordset) element);
         } else if (element instanceof Label) {
+            visit((Label) element);
         } else if (element instanceof Legalnotice) {
+            visit((Legalnotice) element);
         } else if (element instanceof Lhs) {
+            visit((Lhs) element);
         } else if (element instanceof Lineage) {
+            visit((Lineage) element);
         } else if (element instanceof Lineannotation) {
+            visit((Lineannotation) element);
         } else if (element instanceof Link) {
+            visit((Link) element);
         } else if (element instanceof Listitem) {
+            visit((Listitem) element);
         } else if (element instanceof Literal) {
+            visit((Literal) element);
         } else if (element instanceof Literallayout) {
+            visit((Literallayout) element);
         } else if (element instanceof Locator) {
+            visit((Literallayout) element);
         } else if (element instanceof Manvolnum) {
+            visit((Manvolnum) element);
         } else if (element instanceof Markup) {
+            visit((Markup) element);
         } else if (element instanceof Mathphrase) {
+            visit((Mathphrase) element);
         } else if (element instanceof Mediaobject) {
+            visit((Mediaobject) element);
         } else if (element instanceof Member) {
+            visit((Member) element);
         } else if (element instanceof Menuchoice) {
+            visit((Menuchoice) element);
         } else if (element instanceof Methodname) {
+            visit((Methodname) element);
         } else if (element instanceof Methodparam) {
+            visit((Methodparam) element);
         } else if (element instanceof Methodsynopsis) {
+            visit((Methodsynopsis) element);
         } else if (element instanceof Modifier) {
         } else if (element instanceof Mousebutton) {
         } else if (element instanceof Msg) {
@@ -760,6 +853,7 @@ public abstract class AbstractDocbookVisitor {
         } else if (element instanceof Person) {
             visit((Person) element);
         } else if (element instanceof Personblurb) {
+            visit((Personblurb) element);
         } else if (element instanceof Personname) {
         } else if (element instanceof Phone) {
         } else if (element instanceof Phrase) {

@@ -403,6 +403,14 @@ public class PrintDocbookVisitor extends AbstractDocbookVisitor {
 
     }
 
+    private void label(String string) {
+        System.out.println(string);
+    }
+
+    private void value(String string) {
+        System.out.println(string);
+    }
+
     private void print(String string) {
         System.out.print(string);
     }
@@ -416,7 +424,7 @@ public class PrintDocbookVisitor extends AbstractDocbookVisitor {
     }
 
     public void visit(Title title) {
-        print("Title:");
+        label("Title");
         List<Object> list = title.getContent();
         for (Object object : list) {
             visitElement(object);
@@ -424,13 +432,14 @@ public class PrintDocbookVisitor extends AbstractDocbookVisitor {
     }
 
     public void visit(Article article) {
-        //TODO
+        label("Article");
 
         article.getTitlesAndTitleabbrevsAndSubtitles();
         article.getGlossariesAndBibliographiesAndIndices();
     }
 
     public void visit(Book book) {
+        label("Book");
         String actuate = book.getActuate();
         String annotations = book.getAnnotations();
         String arch = book.getArch();
@@ -444,7 +453,7 @@ public class PrintDocbookVisitor extends AbstractDocbookVisitor {
         String dir = book.getDir();
         String href = book.getHref();
         String id = book.getId();
-        String label=book.getLabel();
+        String label = book.getLabel();
         Object linkend = book.getLinkend();
         String os = book.getOs();
         String remap = book.getRemap();
@@ -461,11 +470,11 @@ public class PrintDocbookVisitor extends AbstractDocbookVisitor {
         String xlinkType = book.getXlinkType();
         String xmlLang = book.getXmlLang();
         String xreflabel = book.getXreflabel();
-        
+
         visit(book.getInfo());
         visitObjectList(book.getTitlesAndTitleabbrevsAndSubtitles());
         visitObjectList(book.getGlossariesAndBibliographiesAndIndices());
-        
+
         //TODO Complete counters
         System.out.println("=========================================");
         System.out.println("Number Of Chapters:" + this.numberOfChapters);
@@ -475,7 +484,7 @@ public class PrintDocbookVisitor extends AbstractDocbookVisitor {
 
     //Experiment: show how to remove multiple if (severals if) and instanceof? (List<Object> is the prob.)
     public void visit(Para para) {
-        print("Para:");
+        label("Para");
         this.numberOfPara++;
         List<Object> list = para.getContent();
         for (Object object : list) {
@@ -484,98 +493,109 @@ public class PrintDocbookVisitor extends AbstractDocbookVisitor {
     }
 
     public void visit(Chapter chapter) {
-        print("Chapter:");
+        label("Chapter");
         this.numberOfChapters++;
         visitObjectList(chapter.getTitlesAndTitleabbrevsAndSubtitles());
         visitObjectList(chapter.getGlossariesAndBibliographiesAndIndices());
     }
 
     public void visit(Abbrev abbrev) {
+        label("Abbrev");
         this.visitObjectList(abbrev.getContent());
     }
 
     public void visit(Abstract abstr) {
+        label("Abstract");
         this.visit(abstr.getInfo());
         this.visitObjectList(abstr.getTitlesAndTitleabbrevs());
         this.visitObjectList(abstr.getAnchorsAndParasAndFormalparas());
     }
 
     public void visit(Accel accel) {
-        print("Accel");
+        label("Accel");
         visitObjectList(accel.getContent());
     }
 
     public void visit(Acknowledgements acknowledgements) {
-        //TODO
+        label("Acknowledgements");
     }
 
     public void visit(Acronym acronym) {
-        //TODO
+        label("Acknowledgements");
     }
 
     public void visit(Address element) {
-        print("Address:");
+        label("Address");
         List<Object> content = element.getContent();
         for (Object object : content) {
             visitElement(object);
         }
     }
 
-    public void visit(Affiliation element) {
-        //TODO
-
+    public void visit(Affiliation affiliation) {
+        label("Affiliation");
+        List<Address> addresses = affiliation.getAddresses();
+        for (Address address : addresses) {
+            visit(address);
+        }
+        List<Jobtitle> jobtitles = affiliation.getJobtitles();
+        for (Jobtitle jobtitle : jobtitles) {
+            visit(jobtitle);
+        }
+        Shortaffil shortaffil = affiliation.getShortaffil();
+        visit(shortaffil);
     }
 
     public void visit(Alt element) {
-        //TODO
+        label("Alt");
     }
 
     public void visit(Anchor element) {
-        //TODO
+        label("Anchor");
     }
 
     public void visit(Annotation element) {
-        //TODO
+        label("Annotation");
     }
 
     public void visit(Answer element) {
-        //TODO
+        label("Answer");
     }
 
     public void visit(Appendix element) {
-        //TODO
+        label("Appendix");
     }
 
     public void visit(Application element) {
-        //TODO
+        label("Application");
     }
 
     public void visit(Arc element) {
-        //TODO
+        label("Arc");
     }
 
     public void visit(Area element) {
-        //TODO
+        label("Area");
     }
 
     public void visit(Areaset element) {
-        //TODO
+        label("Areaset");
     }
 
     public void visit(Areaspec element) {
-        //TODO
+        label("Areaspec");
     }
 
     public void visit(Arg element) {
-        //TODO
+        label("Arg");
     }
 
     public void visit(Artpagenums element) {
-        //TODO
+        label("Artpagenums");
     }
 
     public void visit(Attribution element) {
-        //TODO
+        label("Attribution");
     }
 
     public void visit(Audiodata element) {
@@ -595,11 +615,13 @@ public class PrintDocbookVisitor extends AbstractDocbookVisitor {
     }
 
     public void visit(Author element) {
-        //TODO
+        label("Author");
+        visit(element.getPersonname());
+        visitObjectList(element.getPersonblurbsAndAffiliationsAndEmails());
     }
 
     public void visit(Bibliocoverage element) {
-        //TODO
+        label("Bibliocoverage");
     }
 
     public void visit(Bibliodiv element) {
@@ -907,7 +929,7 @@ public class PrintDocbookVisitor extends AbstractDocbookVisitor {
     }
 
     public void visit(Firstname element) {
-        //TODO
+        label("Firstname");
     }
 
     public void visit(Firstterm element) {
@@ -1362,7 +1384,8 @@ public class PrintDocbookVisitor extends AbstractDocbookVisitor {
     }
 
     public void visit(Personname element) {
-        //TODO
+        label("Personname");
+        visitObjectList(element.getContent());
     }
 
     public void visit(Phone element) {
@@ -1748,7 +1771,7 @@ public class PrintDocbookVisitor extends AbstractDocbookVisitor {
     }
 
     public void visit(Surname element) {
-        //TODO
+        label("Surname");
     }
 
     public void visit(Symbol element) {
@@ -1932,7 +1955,8 @@ public class PrintDocbookVisitor extends AbstractDocbookVisitor {
     }
 
     public void visit(Year year) {
-        //TODO
+        label("Year");
+        visitObjectList(year.getContent());
     }
 
 }
