@@ -1,6 +1,31 @@
+/*
+ The MIT License (MIT)
 
+ Copyright (c) 2015 Massimo Caliman
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+ */
 package com.javamaniax.dochi;
 
+import java.util.List;
+
+import java.util.logging.Logger;
 import org.docbook.ns.docbook.Abbrev;
 import org.docbook.ns.docbook.Abstract;
 import org.docbook.ns.docbook.Accel;
@@ -362,22 +387,59 @@ import org.docbook.ns.docbook.Wordasword;
 import org.docbook.ns.docbook.Xref;
 import org.docbook.ns.docbook.Year;
 
-public class PrintBookAttributeDocbookVisitor extends AbstractDocbookVisitor {
+/**
+ * Appendix Article Book Chapter Glossary Part Refentry Section
+ *
+ * @author Massimo Caliman
+ */
+public class DefaultDocbookVisitor extends AbstractDocbookVisitor {
 
-    public PrintBookAttributeDocbookVisitor() {
+    private final static Logger logger = Logger.getLogger(DefaultDocbookVisitor.class.getName());
+
+    private long numberOfChapters;
+    private long numberOfPara;
+
+    public DefaultDocbookVisitor() {
+
     }
 
-    @Override
-    public void visit(String string) {
-        
-    }
-
-    private void println(String string){
+    private void label(String string) {
         System.out.println(string);
     }
-    
-    @Override
+
+    private void value(String string) {
+        System.out.println(string);
+    }
+
+    private void print(String string) {
+        System.out.print(string);
+    }
+
+    private void println(String string) {
+        System.out.println(string);
+    }
+
+    public void visit(String content) {
+        println(content);
+    }
+
+    public void visit(Title title) {
+        label("Title");
+        List<Object> list = title.getContent();
+        for (Object object : list) {
+            visitElement(object);
+        }
+    }
+
+    public void visit(Article article) {
+        label("Article");
+
+        article.getTitlesAndTitleabbrevsAndSubtitles();
+        article.getGlossariesAndBibliographiesAndIndices();
+    }
+
     public void visit(Book book) {
+        label("Book");
         String actuate = book.getActuate();
         String annotations = book.getAnnotations();
         String arch = book.getArch();
@@ -391,7 +453,7 @@ public class PrintBookAttributeDocbookVisitor extends AbstractDocbookVisitor {
         String dir = book.getDir();
         String href = book.getHref();
         String id = book.getId();
-        String label=book.getLabel();
+        String label = book.getLabel();
         Object linkend = book.getLinkend();
         String os = book.getOs();
         String remap = book.getRemap();
@@ -408,729 +470,633 @@ public class PrintBookAttributeDocbookVisitor extends AbstractDocbookVisitor {
         String xlinkType = book.getXlinkType();
         String xmlLang = book.getXmlLang();
         String xreflabel = book.getXreflabel();
-        
+
         visit(book.getInfo());
+        visitObjectList(book.getTitlesAndTitleabbrevsAndSubtitles());
+        visitObjectList(book.getGlossariesAndBibliographiesAndIndices());
 
+        //TODO Complete counters
+        System.out.println("=========================================");
+        System.out.println("Number Of Chapters:" + this.numberOfChapters);
+        System.out.println("Number Of Para:" + this.numberOfPara);
+        System.out.println("=========================================");
     }
 
-    @Override
-    public void visit(Article article) {
-        
-    }
-
-    @Override
-    public void visit(Title title) {
-        
-    }
-
-    @Override
+    //Experiment: show how to remove multiple if (severals if) and instanceof? (List<Object> is the prob.)
     public void visit(Para para) {
-        
+        label("Para");
+        this.numberOfPara++;
+        List<Object> list = para.getContent();
+        for (Object object : list) {
+            visitElement(object);
+        }
     }
 
-    @Override
     public void visit(Chapter chapter) {
-        
+        label("Chapter");
+        this.numberOfChapters++;
+        visitObjectList(chapter.getTitlesAndTitleabbrevsAndSubtitles());
+        visitObjectList(chapter.getGlossariesAndBibliographiesAndIndices());
     }
 
-    @Override
     public void visit(Abbrev abbrev) {
-        
+        label("Abbrev");
+        this.visitObjectList(abbrev.getContent());
     }
 
-    @Override
     public void visit(Abstract abstr) {
-        
+        label("Abstract");
+        this.visit(abstr.getInfo());
+        this.visitObjectList(abstr.getTitlesAndTitleabbrevs());
+        this.visitObjectList(abstr.getAnchorsAndParasAndFormalparas());
     }
 
-    @Override
     public void visit(Accel accel) {
-        
+        label("Accel");
+        visitObjectList(accel.getContent());
     }
 
-    @Override
     public void visit(Acknowledgements acknowledgements) {
-        
+        label("Acknowledgements");
     }
 
-    @Override
     public void visit(Acronym acronym) {
-        
+        label("Acknowledgements");
     }
 
-    @Override
     public void visit(Address element) {
-        
+        label("Address");
+        List<Object> content = element.getContent();
+        for (Object object : content) {
+            visitElement(object);
+        }
     }
 
-    @Override
-    public void visit(Affiliation element) {
-        
+    public void visit(Affiliation affiliation) {
+        label("Affiliation");
+        List<Address> addresses = affiliation.getAddresses();
+        for (Address address : addresses) {
+            visit(address);
+        }
+        List<Jobtitle> jobtitles = affiliation.getJobtitles();
+        for (Jobtitle jobtitle : jobtitles) {
+            visit(jobtitle);
+        }
+        Shortaffil shortaffil = affiliation.getShortaffil();
+        visit(shortaffil);
     }
 
-    @Override
     public void visit(Alt element) {
-        
+        label("Alt");
+        visitObjectList(element.getContent());
     }
 
-    @Override
     public void visit(Anchor element) {
-        
+        label("Anchor");
+        //TODO
     }
 
-    @Override
     public void visit(Annotation element) {
-        
+        label("Annotation");
+        visitObjectList(element.getTitlesAndTitleabbrevs());
+        visitObjectList(element.getItemizedlistsAndOrderedlistsAndProcedures());        
     }
 
-    @Override
     public void visit(Answer element) {
-        
+        label("Answer");
+        visitObjectList(element.getItemizedlistsAndOrderedlistsAndProcedures());
     }
 
-    @Override
     public void visit(Appendix element) {
-        
+        label("Appendix");
+        visitObjectList(element.getTitlesAndTitleabbrevsAndSubtitles());
+        visitObjectList(element.getGlossariesAndBibliographiesAndIndices());
     }
 
-    @Override
     public void visit(Application element) {
-        
+        label("Application");
+        visitObjectList(element.getContent());
     }
 
-    @Override
     public void visit(Arc element) {
-        
+        label("Arc");
+        //TODO
     }
 
-    @Override
     public void visit(Area element) {
-        
+        label("Area");
+        //TODO
     }
 
-    @Override
     public void visit(Areaset element) {
-        
+        label("Areaset");
+        List<Area> areas = element.getAreas();
+        for (Area area : areas) {
+            visit(area);
+        }
+        //TODO
     }
 
-    @Override
     public void visit(Areaspec element) {
-        
+        label("Areaspec");
     }
 
-    @Override
     public void visit(Arg element) {
-        
+        label("Arg");
     }
 
-    @Override
     public void visit(Artpagenums element) {
-        
+        label("Artpagenums");
     }
 
-    @Override
     public void visit(Attribution element) {
-        
+        label("Attribution");
     }
 
-    @Override
     public void visit(Audiodata element) {
-        
+        label("Audiodata");
     }
 
-    @Override
     public void visit(Audioobject element) {
-        
+        label("Audioobject");
     }
 
-    @Override
     public void visit(Authorgroup element) {
-        
+        label("Authorgroup");
     }
 
-    @Override
     public void visit(Authorinitials element) {
-        
+        label("Authorinitials");
     }
 
-    @Override
     public void visit(Author element) {
-        
+        label("Author");
+        visit(element.getPersonname());
+        visitObjectList(element.getPersonblurbsAndAffiliationsAndEmails());
     }
 
-    @Override
     public void visit(Bibliocoverage element) {
-        
+        label("Bibliocoverage");
     }
 
-    @Override
     public void visit(Bibliodiv element) {
-        
+        label("Bibliodiv");
     }
 
-    @Override
     public void visit(Biblioentry element) {
-        
+        label("Biblioentry");
     }
 
-    @Override
     public void visit(Bibliography element) {
-        
+        label("Bibliography");
     }
 
-    @Override
     public void visit(Biblioid element) {
-        
+        label("Biblioid");
     }
 
-    @Override
     public void visit(Bibliolist element) {
-        
+        label("Bibliolist");
     }
 
-    @Override
     public void visit(Bibliomisc element) {
-        
+        label("Bibliomisc");
     }
 
-    @Override
     public void visit(Bibliomixed element) {
-        
+        label("Bibliomixed");
     }
 
-    @Override
     public void visit(Bibliomset element) {
-        
+        label("Bibliomset");
     }
 
-    @Override
     public void visit(Biblioref element) {
-        
+        label("Biblioref");
     }
 
-    @Override
     public void visit(Bibliorelation element) {
-        
+        label("Bibliorelation");
     }
 
-    @Override
     public void visit(Biblioset element) {
-        
+        label("Biblioset");
     }
 
-    @Override
     public void visit(Bibliosource element) {
-        
+        label("Bibliosource");
     }
 
-    @Override
     public void visit(Blockquote element) {
-        
+        label("Blockquote");
     }
 
-    @Override
     public void visit(Bridgehead element) {
-        
+        label("Bridgehead");
     }
 
-    @Override
     public void visit(Callout element) {
-        
+        label("Callout");
     }
 
-    @Override
     public void visit(Calloutlist element) {
-        
+        label("Calloutlist");
     }
 
-    @Override
     public void visit(Caption element) {
-        
+        label("Caption");
     }
 
-    @Override
     public void visit(Caution element) {
-        
+        label("Caution");
     }
 
-    @Override
     public void visit(Citation element) {
-        
+        label("Citation");
     }
 
-    @Override
     public void visit(Citebiblioid element) {
-        
+        label("Citebiblioid");
     }
 
-    @Override
     public void visit(Citerefentry element) {
-        
+        label("Citerefentry");
     }
 
-    @Override
     public void visit(Citetitle element) {
-        
+        label("Citetitle");
     }
 
-    @Override
     public void visit(City element) {
-        
+        label("City");
+        visitObjectList(element.getContent());        
     }
 
-    @Override
     public void visit(Classname element) {
-        
+        label("Classname");
+        visitObjectList(element.getContent());
     }
 
-    @Override
     public void visit(Classsynopsisinfo element) {
-        
+        label("Classsynopsisinfo");
+        visitObjectList(element.getContent());
     }
 
-    @Override
     public void visit(Classsynopsis element) {
-        
+        label("Classsynopsis");
     }
 
-    @Override
     public void visit(Cmdsynopsis element) {
-        
+        label("Cmdsynopsis");
     }
 
-    @Override
     public void visit(Code element) {
-        
+        label("Code");
     }
 
-    @Override
     public void visit(Co element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Colgroup element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Col element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Collab element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Colophon element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Colspec element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Command element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Computeroutput element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Confdates element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Confgroup element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Confnum element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Confsponsor element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Conftitle element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Constant element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Constraintdef element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Constraint element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Constructorsynopsis element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Contractnum element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Contractsponsor element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Contrib element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Copyright element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Coref element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Country element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Cover element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Database element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Date element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Dedication element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Destructorsynopsis element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Edition element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Editor element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Email element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Emphasis element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Entry element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Entrytbl element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Envar element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Epigraph element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Equation element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Errorcode element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Errorname element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Errortext element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Errortype element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Example element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Exceptionname element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Extendedlink element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Fax element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Fieldsynopsis element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Figure element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Filename element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Firstname element) {
-        
+        label("Firstname");
+        visitObjectList(element.getContent());
     }
 
-    @Override
     public void visit(Firstterm element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Footnote element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Footnoteref element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Foreignphrase element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Formalpara element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Funcdef element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Funcparams element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Funcprototype element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Funcsynopsisinfo element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Funcsynopsis element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Function element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Glossary element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Glossdef element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Glossdiv element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Glossentry element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Glosslist element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Glossseealso element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Glosssee element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Glossterm element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Group element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Guibutton element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Guiicon element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Guilabel element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Guimenuitem element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Guimenu element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Guisubmenu element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Hardware element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Holder element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Honorific element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Imagedata element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Imageobjectco element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Imageobject element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Important element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Indexdiv element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Indexentry element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Index element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Indexterm element) {
-        
+        //TODO
     }
 
     public void visit(Info info) {
@@ -1140,1084 +1106,877 @@ public class PrintBookAttributeDocbookVisitor extends AbstractDocbookVisitor {
         visitObjectList(info.getTitlesAndTitleabbrevsAndSubtitles());
     }
 
-    @Override
     public void visit(Informalequation element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Informalexample element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Informalfigure element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Informaltable element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Initializer element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Inlineequation element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Inlinemediaobject element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Interfacename element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Issuenum element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Itemizedlist element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Itermset element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Jobtitle element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Keycap element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Keycode element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Keycombo element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Keysym element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Keyword element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Keywordset element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Label element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Legalnotice element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Lhs element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Lineage element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Lineannotation element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Link element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Listitem element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Literal element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Literallayout element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Locator element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Manvolnum element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Markup element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Mathphrase element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Mediaobject element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Member element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Menuchoice element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Methodname element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Methodparam element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Methodsynopsis element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Modifier element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Mousebutton element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Msgaud element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Msgentry element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Msgexplan element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Msginfo element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Msg element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Msglevel element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Msgmain element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Msgorig element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Msgrel element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Msgset element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Msgsub element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Msgtext element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Nonterminal element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Note element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Olink element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Ooclass element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Ooexception element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Oointerface element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Optional element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Option element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Orderedlist element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Orgdiv element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Org element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Orgname element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Otheraddr element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Othercredit element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Othername element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Package element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Pagenums element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Paramdef element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Parameter element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Partintro element) {
-        
+        print("Partinto:");
     }
 
-    @Override
     public void visit(Part element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Personblurb element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Person element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Personname element) {
-        
+        label("Personname");
+        visitObjectList(element.getContent());
     }
 
-    @Override
     public void visit(Phone element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Phrase element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Pob element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Postcode element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Preface element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Primaryie element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Primary element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Printhistory element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Procedure element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Production element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Productionrecap element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Productionset element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Productname element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Productnumber element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Programlistingco element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Programlisting element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Prompt element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Property element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Pubdate element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Publisher element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Publishername element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Qandadiv element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Qandaentry element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Qandaset element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Question element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Quote element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Refclass element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Refdescriptor element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Refentry element) {
-        
+        this.visit(element.getInfo());
+        this.visitRefsectionList(element.getRefsections());
     }
 
-    @Override
     public void visit(Refentrytitle element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Reference element) {
-        
+        print("Reference:");
+        this.visitObjectList(element.getTitlesAndTitleabbrevsAndSubtitles());
+        this.visitRefentryList(element.getRefentries());
+        //element.getPartintro();
     }
 
-    @Override
     public void visit(Refmeta element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Refmiscinfo element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Refnamediv element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Refname element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Refpurpose element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Refsect1 element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Refsect2 element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Refsect3 element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Refsection refsection) {
-        
+        visitObjectList(refsection.getTitlesAndTitleabbrevsAndSubtitles());
+        visitObjectList(refsection.getItemizedlistsAndOrderedlistsAndProcedures());
+        visitRefsectionList(refsection.getRefsections());
     }
 
-    @Override
     public void visit(Refsynopsisdiv element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Releaseinfo element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Remark element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Replaceable element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Returnvalue element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Revdescription element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Revhistory element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Revision element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Revnumber element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Revremark element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Rhs element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Row element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Sbr element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Screenco element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Screen element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Screenshot element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Secondaryie element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Secondary element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Sect1 element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Sect2 element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Sect3 element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Sect4 element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Sect5 element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Section element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Seealsoie element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Seealso element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Seeie element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(See element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Seg element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Seglistitem element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Segmentedlist element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Segtitle element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Seriesvolnums element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Setindex element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Set element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Shortaffil element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Shortcut element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Sidebar element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Simpara element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Simplelist element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Simplemsgentry element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Simplesect element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Spanspec element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(State element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Stepalternatives element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Step element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Street element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Subject element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Subjectset element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Subjectterm element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Subscript element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Substeps element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Subtitle element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Superscript element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Surname element) {
-        
+        label("Surname");
+        visitObjectList(element.getContent());
     }
 
-    @Override
     public void visit(Symbol element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Synopfragment element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Synopfragmentref element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Synopsis element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Systemitem element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Table element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Tag element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Task element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Taskprerequisites element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Taskrelated element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Tasksummary element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Tbody element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Td element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Termdef element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Term element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Tertiaryie element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Tertiary element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Textdata element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Textobject element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Tfoot element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Tgroup element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Thead element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Th element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Tip element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Titleabbrev element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Tocdiv element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Tocentry element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Toc element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Token element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Trademark element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Tr element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Type element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Uri element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Userinput element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Varargs element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Variablelist element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Varlistentry element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Varname element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Videodata element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Videoobject element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Void element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Volumenum element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Warning element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Wordasword element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Xref element) {
-        
+        //TODO
     }
 
-    @Override
     public void visit(Year year) {
-        
+        label("Year");
+        visitObjectList(year.getContent());
     }
-    
+
 }
