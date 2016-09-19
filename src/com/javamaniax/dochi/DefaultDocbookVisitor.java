@@ -433,7 +433,6 @@ public class DefaultDocbookVisitor extends AbstractDocbookVisitor {
 
     public void visit(Article article) {
         label("Article");
-
         article.getTitlesAndTitleabbrevsAndSubtitles();
         article.getGlossariesAndBibliographiesAndIndices();
     }
@@ -518,10 +517,13 @@ public class DefaultDocbookVisitor extends AbstractDocbookVisitor {
 
     public void visit(Acknowledgements acknowledgements) {
         label("Acknowledgements");
+        visitObjectList(acknowledgements.getTitlesAndTitleabbrevsAndSubtitles());
+        visitObjectList(acknowledgements.getItemizedlistsAndOrderedlistsAndProcedures());        
     }
 
     public void visit(Acronym acronym) {
         label("Acknowledgements");
+        visitObjectList(acronym.getContent());
     }
 
     public void visit(Address element) {
@@ -1972,6 +1974,8 @@ public class DefaultDocbookVisitor extends AbstractDocbookVisitor {
 
     public void visit(Xref element) {
         //TODO
+        element.getXreflabel();
+        element.getXrefstyle();
     }
 
     public void visit(Year year) {
