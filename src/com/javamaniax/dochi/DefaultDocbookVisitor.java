@@ -707,10 +707,13 @@ public class DefaultDocbookVisitor extends AbstractDocbookVisitor {
 
     public void visit(Caption element) {
         label("Caption");
+        visitObjectList(element.getContent());
     }
 
     public void visit(Caution element) {
-        label("Caution");
+        label("Caution");        
+        visitObjectList(element.getItemizedlistsAndOrderedlistsAndProcedures());
+        visitObjectList(element.getTitlesAndTitleabbrevs());
     }
 
     public void visit(Citation element) {
@@ -757,195 +760,195 @@ public class DefaultDocbookVisitor extends AbstractDocbookVisitor {
     }
 
     public void visit(Co element) {
-        //TODO
+        label("Co");
     }
 
     public void visit(Colgroup element) {
-        //TODO
+        label("Colgroup");
     }
 
     public void visit(Col element) {
-        //TODO
+        label("Col");
     }
 
     public void visit(Collab element) {
-        //TODO
+        label("Collab");
     }
 
     public void visit(Colophon element) {
-        //TODO
+        label("Colophon");
     }
 
     public void visit(Colspec element) {
-        //TODO
+        label("Colspec");
     }
 
     public void visit(Command element) {
-        //TODO
+        label("Command");
     }
 
     public void visit(Computeroutput element) {
-        //TODO
+        label("Computeroutput");
     }
 
     public void visit(Confdates element) {
-        //TODO
+        label("Confdates");
     }
 
     public void visit(Confgroup element) {
-        //TODO
+        label("Confgroup");
     }
 
     public void visit(Confnum element) {
-        //TODO
+        label("Confnum");
     }
 
     public void visit(Confsponsor element) {
-        //TODO
+        label("Confsponsor");
     }
 
     public void visit(Conftitle element) {
-        //TODO
+        label("Conftitle");
     }
 
     public void visit(Constant element) {
-        //TODO
+        label("Constant");
     }
 
     public void visit(Constraintdef element) {
-        //TODO
+        label("Constraintdef");
     }
 
     public void visit(Constraint element) {
-        //TODO
+        label("Constraint");
     }
 
     public void visit(Constructorsynopsis element) {
-        //TODO
+        label("Constructorsynopsis");
     }
 
     public void visit(Contractnum element) {
-        //TODO
+        label("Contractnum");
     }
 
     public void visit(Contractsponsor element) {
-        //TODO
+        label("Contractsponsor");
     }
 
     public void visit(Contrib element) {
-        //TODO
+        label("Contrib");
     }
 
     public void visit(Copyright element) {
-        //TODO
+        label("Copyright");
     }
 
     public void visit(Coref element) {
-        //TODO
+        label("Coref");
     }
 
     public void visit(Country element) {
-        //TODO
+        label("Country");
     }
 
     public void visit(Cover element) {
-        //TODO
+        label("");
     }
 
     public void visit(Database element) {
-        //TODO
+        label("");
     }
 
     public void visit(Date element) {
-        //TODO
+        label("");
     }
 
     public void visit(Dedication element) {
-        //TODO
+        label("");
     }
 
     public void visit(Destructorsynopsis element) {
-        //TODO
+        label("");
     }
 
     public void visit(Edition element) {
-        //TODO
+        label("");
     }
 
     public void visit(Editor element) {
-        //TODO
+        label("");
     }
 
     public void visit(Email element) {
-        //TODO
+        label("");
     }
 
     public void visit(Emphasis element) {
-        //TODO
+        label("");
     }
 
     public void visit(Entry element) {
-        //TODO
+        label("");
     }
 
     public void visit(Entrytbl element) {
-        //TODO
+        label("");
     }
 
     public void visit(Envar element) {
-        //TODO
+        label("");
     }
 
     public void visit(Epigraph element) {
-        //TODO
+        label("");
     }
 
     public void visit(Equation element) {
-        //TODO
+        label("");
     }
 
     public void visit(Errorcode element) {
-        //TODO
+        label("");
     }
 
     public void visit(Errorname element) {
-        //TODO
+        label("");
     }
 
     public void visit(Errortext element) {
-        //TODO
+        label("");
     }
 
     public void visit(Errortype element) {
-        //TODO
+        label("");
     }
 
     public void visit(Example element) {
-        //TODO
+        label("");
     }
 
     public void visit(Exceptionname element) {
-        //TODO
+        label("");
     }
 
     public void visit(Extendedlink element) {
-        //TODO
+        label("");
     }
 
     public void visit(Fax element) {
-        //TODO
+        label("");
     }
 
     public void visit(Fieldsynopsis element) {
-        //TODO
+        label("");
     }
 
     public void visit(Figure element) {
-        //TODO
+        label("");
     }
 
     public void visit(Filename element) {
-        //TODO
+        label("");
     }
 
     public void visit(Firstname element) {
@@ -954,87 +957,87 @@ public class DefaultDocbookVisitor extends AbstractDocbookVisitor {
     }
 
     public void visit(Firstterm element) {
-        //TODO
+        label("");
     }
 
     public void visit(Footnote element) {
-        //TODO
+        label("");
     }
 
     public void visit(Footnoteref element) {
-        //TODO
+        label("");
     }
 
     public void visit(Foreignphrase element) {
-        //TODO
+        label("");
     }
 
     public void visit(Formalpara element) {
-        //TODO
+        label("");
     }
 
     public void visit(Funcdef element) {
-        //TODO
+        label("");
     }
 
     public void visit(Funcparams element) {
-        //TODO
+        label("");
     }
 
     public void visit(Funcprototype element) {
-        //TODO
+        label("");
     }
 
     public void visit(Funcsynopsisinfo element) {
-        //TODO
+        label("");
     }
 
     public void visit(Funcsynopsis element) {
-        //TODO
+        label("");
     }
 
     public void visit(Function element) {
-        //TODO
+        label("");
     }
 
     public void visit(Glossary element) {
-        //TODO
+        label("");
     }
 
     public void visit(Glossdef element) {
-        //TODO
+        label("");
     }
 
     public void visit(Glossdiv element) {
-        //TODO
+        label("");
     }
 
     public void visit(Glossentry element) {
-        //TODO
+        label("");
     }
 
     public void visit(Glosslist element) {
-        //TODO
+        label("");
     }
 
     public void visit(Glossseealso element) {
-        //TODO
+        label("");
     }
 
     public void visit(Glosssee element) {
-        //TODO
+        label("");
     }
 
     public void visit(Glossterm element) {
-        //TODO
+        label("");
     }
 
     public void visit(Group element) {
-        //TODO
+        label("");
     }
 
     public void visit(Guibutton element) {
-        //TODO
+        label("");
     }
 
     public void visit(Guiicon element) {
