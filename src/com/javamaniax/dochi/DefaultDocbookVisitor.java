@@ -23,6 +23,7 @@
  */
 package com.javamaniax.dochi;
 
+import com.javamaniax.dochi.decorators.Decorator;
 import java.util.List;
 
 import java.util.logging.Logger;
@@ -392,15 +393,17 @@ import org.docbook.ns.docbook.Year;
  *
  * @author Massimo Caliman
  */
-public class DefaultDocbookVisitor extends AbstractDocbookVisitor {
+public class DefaultDocbookVisitor extends AbstractDocbookVisitor implements Decorator {
 
     private final static Logger logger = Logger.getLogger(DefaultDocbookVisitor.class.getName());
 
     private long numberOfChapters;
     private long numberOfPara;
 
-    public DefaultDocbookVisitor() {
+    private Decorator decorator;
 
+    public DefaultDocbookVisitor(Decorator decorator) {
+        this.decorator = decorator;
     }
 
     private void label(String string) {
@@ -518,7 +521,7 @@ public class DefaultDocbookVisitor extends AbstractDocbookVisitor {
     public void visit(Acknowledgements acknowledgements) {
         label("Acknowledgements");
         visitObjectList(acknowledgements.getTitlesAndTitleabbrevsAndSubtitles());
-        visitObjectList(acknowledgements.getItemizedlistsAndOrderedlistsAndProcedures());        
+        visitObjectList(acknowledgements.getItemizedlistsAndOrderedlistsAndProcedures());
     }
 
     public void visit(Acronym acronym) {
@@ -561,7 +564,7 @@ public class DefaultDocbookVisitor extends AbstractDocbookVisitor {
     public void visit(Annotation element) {
         label("Annotation");
         visitObjectList(element.getTitlesAndTitleabbrevs());
-        visitObjectList(element.getItemizedlistsAndOrderedlistsAndProcedures());        
+        visitObjectList(element.getItemizedlistsAndOrderedlistsAndProcedures());
     }
 
     public void visit(Answer element) {
@@ -711,7 +714,7 @@ public class DefaultDocbookVisitor extends AbstractDocbookVisitor {
     }
 
     public void visit(Caution element) {
-        label("Caution");        
+        label("Caution");
         visitObjectList(element.getItemizedlistsAndOrderedlistsAndProcedures());
         visitObjectList(element.getTitlesAndTitleabbrevs());
     }
@@ -734,7 +737,7 @@ public class DefaultDocbookVisitor extends AbstractDocbookVisitor {
 
     public void visit(City element) {
         label("City");
-        visitObjectList(element.getContent());        
+        visitObjectList(element.getContent());
     }
 
     public void visit(Classname element) {
@@ -1763,11 +1766,14 @@ public class DefaultDocbookVisitor extends AbstractDocbookVisitor {
     }
 
     public void visit(Street element) {
-        //TODO
+        visitObjectList(element.getContent());
     }
 
     public void visit(Subject element) {
-        //TODO
+        List<Subjectterm> subjectterms = element.getSubjectterms();
+        for (Subjectterm subjectterm : subjectterms) {
+            visit(subjectterm);
+        }
     }
 
     public void visit(Subjectset element) {
@@ -1787,7 +1793,7 @@ public class DefaultDocbookVisitor extends AbstractDocbookVisitor {
     }
 
     public void visit(Subtitle element) {
-        //TODO
+        visitObjectList(element.getContent());
     }
 
     public void visit(Superscript element) {
@@ -1816,59 +1822,85 @@ public class DefaultDocbookVisitor extends AbstractDocbookVisitor {
     }
 
     public void visit(Systemitem element) {
-        //TODO
+        element.getContent();
     }
 
     public void visit(Table element) {
-        //TODO
+        element.getColgroups();
+        element.getCols();
+        element.getIndexterms();
+        element.getMediaobjects();
+        element.getTbodies();
+        element.getTextobjects();
+        element.getTfoot();
+        element.getTgroups();
+        element.getThead();
+        element.getTitleabbrev();
+        element.getTrs();
     }
 
     public void visit(Tag element) {
-        //TODO
+        visitObjectList(element.getContent());
     }
 
     public void visit(Task element) {
-        //TODO
+        element.getExamples();
+        element.getProcedure();
+        element.getTaskprerequisites();
+        element.getTaskrelated();
+        element.getTasksummary();
+        visitObjectList(element.getTitlesAndTitleabbrevsAndSubtitles());
     }
 
     public void visit(Taskprerequisites element) {
-        //TODO
+        visitObjectList(element.getTitlesAndTitleabbrevs());
+        visitObjectList(element.getItemizedlistsAndOrderedlistsAndProcedures());
     }
 
     public void visit(Taskrelated element) {
-        //TODO
+        visitObjectList(element.getTitlesAndTitleabbrevs());
+        visitObjectList(element.getItemizedlistsAndOrderedlistsAndProcedures());
     }
 
     public void visit(Tasksummary element) {
-        //TODO
+        visitObjectList(element.getItemizedlistsAndOrderedlistsAndProcedures());
+        visitObjectList(element.getTitlesAndTitleabbrevs());
     }
 
     public void visit(Tbody element) {
-        //TODO
+        List<Row> rows = element.getRows();
+        for (Row row : rows) {
+            visit(row);
+        }
+        List<Tr> trs = element.getTrs();
+        for (Tr tr : trs) {
+            visit(tr);
+        }
     }
 
     public void visit(Td element) {
-        //TODO
+        visitObjectList(element.getContent());
     }
 
     public void visit(Termdef element) {
-        //TODO
+        visitObjectList(element.getContent());
     }
 
     public void visit(Term element) {
-        //TODO
+        visitObjectList(element.getContent());
     }
 
     public void visit(Tertiaryie element) {
-        //TODO
+        visitObjectList(element.getContent());
+        visitObjectList(element.getLinkends());
     }
 
     public void visit(Tertiary element) {
-        //TODO
+        visitObjectList(element.getContent());
     }
 
     public void visit(Textdata element) {
-        //TODO
+
     }
 
     public void visit(Textobject element) {
@@ -1884,59 +1916,75 @@ public class DefaultDocbookVisitor extends AbstractDocbookVisitor {
     }
 
     public void visit(Thead element) {
-        //TODO
+        List<Tr> trs = element.getTrs();
+        for (Tr tr : trs) {
+            visit(tr);
+        }
+        List<Row> rows = element.getRows();
+        for (Row row : rows) {
+            visit(row);
+        }
+        List<Colspec> colspecs = element.getColspecs();
+        for (Colspec colspec : colspecs) {
+            visit(colspec);
+        }
+
     }
 
     public void visit(Th element) {
-        //TODO
+        visitObjectList(element.getContent());
     }
 
     public void visit(Tip element) {
-        //TODO
+        visitObjectList(element.getItemizedlistsAndOrderedlistsAndProcedures());
+        visitObjectList(element.getTitlesAndTitleabbrevs());
     }
 
     public void visit(Titleabbrev element) {
-        //TODO
+        visitObjectList(element.getContent());
     }
 
     public void visit(Tocdiv element) {
-        //TODO
+        visitObjectList(element.getItemizedlistsAndOrderedlistsAndProcedures());
     }
 
     public void visit(Tocentry element) {
-        //TODO
+        visitObjectList(element.getContent());
+
     }
 
     public void visit(Toc element) {
-        //TODO
+        visitObjectList(element.getItemizedlistsAndOrderedlistsAndProcedures());
+        visitObjectList(element.getTitlesAndTitleabbrevs());
+        visitObjectList(element.getTocdivsAndTocentries());
     }
 
     public void visit(Token element) {
-        //TODO
+        visitObjectList(element.getContent());
     }
 
     public void visit(Trademark element) {
-        //TODO
+        visitObjectList(element.getContent());
     }
 
     public void visit(Tr element) {
-        //TODO
+        visitObjectList(element.getThsAndTds());
     }
 
     public void visit(Type element) {
-        //TODO
+        visitObjectList(element.getContent());
     }
 
     public void visit(Uri element) {
-        //TODO
+        visitObjectList(element.getContent());
     }
 
     public void visit(Userinput element) {
-        //TODO
+        visitObjectList(element.getContent());
     }
 
     public void visit(Varargs element) {
-        //TODO
+
     }
 
     public void visit(Variablelist element) {
@@ -1960,7 +2008,7 @@ public class DefaultDocbookVisitor extends AbstractDocbookVisitor {
     }
 
     public void visit(Void element) {
-        //TODO
+        //this is a void element.        
     }
 
     public void visit(Volumenum element) {
@@ -1968,11 +2016,12 @@ public class DefaultDocbookVisitor extends AbstractDocbookVisitor {
     }
 
     public void visit(Warning element) {
-        //TODO
+        visitObjectList(element.getTitlesAndTitleabbrevs());
+        visitObjectList(element.getItemizedlistsAndOrderedlistsAndProcedures());
     }
 
     public void visit(Wordasword element) {
-        //TODO
+        visitObjectList(element.getContent());
     }
 
     public void visit(Xref element) {

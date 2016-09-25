@@ -33,10 +33,10 @@ import java.io.IOException;
 public class Dochi {
 
     public static void main(String[] args) throws IOException {
-        DefaultDocbookVisitor visitor = new DefaultDocbookVisitor();
+        DefaultDocbookVisitor visitor = new DefaultDocbookVisitor(null);
         //visitor.visitBookFile(new File("/home/mcaliman/NetBeansProjects/dochi/docbook5/bookexample1.xml"));
         
-        visitor = new DefaultDocbookVisitor();
+        visitor = new DefaultDocbookVisitor(null);
         visitor.visitBookFile(new File("/home/mcaliman/NetBeansProjects/dochi/docbook5/refentry.007.ns.xml"));
         
        
