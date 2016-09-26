@@ -21,25 +21,44 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
-package com.javamaniax.dochi;
+package com.javamaniax.dochi.decorators;
 
-import com.javamaniax.dochi.decorators.PrintDecorator;
-import java.io.File;
-import java.io.IOException;
+import java.util.List;
+import org.docbook.ns.docbook.Xref;
+import org.docbook.ns.docbook.Year;
 
 /**
+ * Appendix Article Book Chapter Glossary Part Refentry Section
  *
  * @author Massimo Caliman
  */
-public class Dochi {
+public class PrintDecorator implements Decorator {
 
-    public static void main(String[] args) throws IOException {
-        String articleExample = "/home/mcaliman/NetBeansProjects/dochi/docbook5/howto.xml";
-        String bookExample = "/home/mcaliman/NetBeansProjects/dochi/docbook5/refentry.007.ns.xml";
-        DefaultDocbookVisitor visitor = new DefaultDocbookVisitor(new PrintDecorator());
-        //visitor.visitBookFile(new File(bookExample));
-        visitor.visitArticleFile(new File(articleExample));
-
+    @Override
+    public void print(String string) {
+        System.out.print(string);
     }
 
+    @Override
+    public void println(String string) {
+        System.out.println(string);
+    }
+
+    @Override
+    public void print(Year year) {
+        StringBuilder string = new StringBuilder();
+        List<Object> content = year.getContent();
+        for (Object obj : content) {
+            if(obj!=null && obj instanceof String){
+                string.append(obj);
+            }
+        }
+        println("year:"+string);
+    }
+
+    @Override
+    public void print(Xref xref) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
 }

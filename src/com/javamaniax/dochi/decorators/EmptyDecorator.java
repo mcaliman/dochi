@@ -1,7 +1,7 @@
 /*
  The MIT License (MIT)
 
- Copyright (c) 2016 Massimo Caliman
+ Copyright (c) 2015 Massimo Caliman
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -23,21 +23,34 @@
  */
 package com.javamaniax.dochi.decorators;
 
+import org.docbook.ns.docbook.Xref;
+import org.docbook.ns.docbook.Year;
+
 /**
- * TODO
+ * Appendix Article Book Chapter Glossary Part Refentry Section
  *
  * @author Massimo Caliman
  */
-public class HTML5V1Decorator implements Decorator {
-    
+public class EmptyDecorator implements Decorator {
+
     @Override
     public void print(String string) {
-        System.out.print(string);
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void println(String string) {
-        System.out.println(string);
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void print(Year year) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void print(Xref xref) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
