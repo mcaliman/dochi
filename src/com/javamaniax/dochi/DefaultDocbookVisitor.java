@@ -1212,10 +1212,12 @@ public class DefaultDocbookVisitor implements Decorator {
         }
     }
 
-    public void visit(Article article) {
-        label("Article");
+    /**
+     * 
+     * @param article 
+     */
+    public void visit(Article article) {        
         visit(article.getInfo());
-
         visitObjectList(article.getTitlesAndTitleabbrevsAndSubtitles());
         visitObjectList(article.getGlossariesAndBibliographiesAndIndices());
     }
