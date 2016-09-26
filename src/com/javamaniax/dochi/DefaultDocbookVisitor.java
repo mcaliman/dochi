@@ -407,19 +407,19 @@ public class DefaultDocbookVisitor extends AbstractDocbookVisitor implements Dec
     }
 
     private void label(String string) {
-        System.out.println(string);
+        //System.out.println(string);
     }
 
     private void value(String string) {
         System.out.println(string);
     }
 
-    private void print(String string) {
-        System.out.print(string);
+    public void print(String string) {
+        decorator.print(string);
     }
 
-    private void println(String string) {
-        System.out.println(string);
+    public void println(String string) {
+        decorator.println(string);
     }
 
     public void visit(String content) {
@@ -436,8 +436,10 @@ public class DefaultDocbookVisitor extends AbstractDocbookVisitor implements Dec
 
     public void visit(Article article) {
         label("Article");
-        article.getTitlesAndTitleabbrevsAndSubtitles();
-        article.getGlossariesAndBibliographiesAndIndices();
+        visit(article.getInfo());
+        
+        visitObjectList(article.getTitlesAndTitleabbrevsAndSubtitles());
+        visitObjectList(article.getGlossariesAndBibliographiesAndIndices());
     }
 
     public void visit(Book book) {
@@ -628,6 +630,7 @@ public class DefaultDocbookVisitor extends AbstractDocbookVisitor implements Dec
 
     public void visit(Authorgroup element) {
         label("Authorgroup");
+        visitObjectList(element.getAuthorsAndEditorsAndOthercredits());
     }
 
     public void visit(Authorinitials element) {
@@ -840,6 +843,7 @@ public class DefaultDocbookVisitor extends AbstractDocbookVisitor implements Dec
 
     public void visit(Contrib element) {
         label("Contrib");
+        visitObjectList(element.getContent());
     }
 
     public void visit(Copyright element) {
@@ -884,6 +888,7 @@ public class DefaultDocbookVisitor extends AbstractDocbookVisitor implements Dec
 
     public void visit(Email element) {
         label("");
+        visitObjectList(element.getContent());
     }
 
     public void visit(Emphasis element) {
@@ -1371,7 +1376,10 @@ public class DefaultDocbookVisitor extends AbstractDocbookVisitor implements Dec
     }
 
     public void visit(Othercredit element) {
-        //TODO
+        visit(element.getOrgname());
+        visitObjectList(element.getPersonblurbsAndAffiliationsAndEmails());
+        visit(element.getPersonname());
+        
     }
 
     public void visit(Othername element) {
@@ -1488,7 +1496,7 @@ public class DefaultDocbookVisitor extends AbstractDocbookVisitor implements Dec
     }
 
     public void visit(Pubdate element) {
-        //TODO
+        visit(element.getContent());
     }
 
     public void visit(Publisher element) {

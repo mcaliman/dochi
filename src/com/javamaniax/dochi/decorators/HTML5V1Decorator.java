@@ -1,7 +1,7 @@
 /*
  The MIT License (MIT)
 
- Copyright (c) 2015 Massimo Caliman
+ Copyright (c) 2016 Massimo Caliman
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -21,26 +21,23 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
-package com.javamaniax.dochi;
-
-import com.javamaniax.dochi.decorators.HTML5V1Decorator;
-import java.io.File;
-import java.io.IOException;
+package com.javamaniax.dochi.decorators;
 
 /**
+ * TODO
  *
  * @author Massimo Caliman
  */
-public class Dochi {
-
-    public static void main(String[] args) throws IOException {
-        String articleExample = "/home/mcaliman/NetBeansProjects/dochi/docbook5/howto.xml";
-        String bookExample = "/home/mcaliman/NetBeansProjects/dochi/docbook5/refentry.007.ns.xml";
-        DefaultDocbookVisitor visitor = new DefaultDocbookVisitor(new HTML5V1Decorator());
-        //visitor.visitBookFile(new File(bookExample));
-        visitor.visitArticleFile(new File(articleExample));
-        
-       
+public class HTML5V1Decorator implements Decorator {
+    
+    @Override
+    public void print(String string) {
+        System.out.print(string);
     }
 
+    @Override
+    public void println(String string) {
+        System.out.println(string);
+    }
+    
 }
