@@ -457,7 +457,9 @@ public class DefaultDocbookVisitor implements Decorator {
         }
     }
 
-    //TODO Classical example need Chain-of-responsibility pattern!!!! (next release)
+
+    
+//<editor-fold defaultstate="collapsed" desc="TODO Classical example need Chain-of-responsibility pattern!!!! (next release)">
     public void visitElement(Object element) {
         if (element instanceof Abbrev) {
         } else if (element instanceof Abstract) {
@@ -1181,9 +1183,9 @@ public class DefaultDocbookVisitor implements Decorator {
         } else if (element instanceof String) {
             visit((String) element);
         }
-
     }
-
+//</editor-fold>
+    
     private void label(String string) {
         //System.out.println(string);
     }
@@ -1266,10 +1268,11 @@ public class DefaultDocbookVisitor implements Decorator {
     public void visit(Para para) {
         label("Para");
         this.numberOfPara++;
-        List<Object> list = para.getContent();
+        print(para);
+        /*List<Object> list = para.getContent();
         for (Object object : list) {
             visitElement(object);
-        }
+        }*/
     }
 
     public void visit(Chapter chapter) {
@@ -2458,7 +2461,21 @@ public class DefaultDocbookVisitor implements Decorator {
     }
 
     public void visit(Section element) {
-        //TODO
+        visitObjectList(element.getGlossariesAndBibliographiesAndIndices());
+        visitObjectList(element.getItemizedlistsAndOrderedlistsAndProcedures());
+        List<Refentry> refentries = element.getRefentries();
+        for (Refentry refentry : refentries) {
+            visit(refentry);
+        }
+        List<Section> sections = element.getSections();
+        for (Section section : sections) {
+            visit(section);
+        }
+        List<Simplesect> simplesects = element.getSimplesects();
+        for (Simplesect simplesect : simplesects) {
+            visit(simplesect);
+        }
+        visitObjectList(element.getTitlesAndTitleabbrevsAndSubtitles());
     }
 
     public void visit(Seealsoie element) {
@@ -2530,7 +2547,9 @@ public class DefaultDocbookVisitor implements Decorator {
     }
 
     public void visit(Simplesect element) {
-        //TODO
+        visitObjectList(element.getItemizedlistsAndOrderedlistsAndProcedures());
+        visitObjectList(element.getTitlesAndTitleabbrevsAndSubtitles());
+        
     }
 
     public void visit(Spanspec element) {
@@ -2815,6 +2834,12 @@ public class DefaultDocbookVisitor implements Decorator {
     private void visit(Year year) {
         print(year);
     }
+
+//<editor-fold defaultstate="collapsed" desc="visit() methods">
+    
+//</editor-fold>
+    
+    
     
     @Override
     public void print(Article article) {
@@ -2830,8 +2855,19 @@ public class DefaultDocbookVisitor implements Decorator {
         decorator.print(subtitle);
     }
     
+    @Override
+    public void print(Para para) {
+        decorator.print(para);
+    }
+    
     //==>
 
+    
+
+//<editor-fold defaultstate="collapsed" desc="print() decorator methods">
+    
+    
+    
     @Override
     public void print(Year year) {
         decorator.print(year);
@@ -2841,11 +2877,8 @@ public class DefaultDocbookVisitor implements Decorator {
     public void print(Xref xref) {
         decorator.print(xref);
     }
+//</editor-fold>
 
+   
     
-
-    
-
-    
-
 }

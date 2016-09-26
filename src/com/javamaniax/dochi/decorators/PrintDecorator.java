@@ -25,6 +25,7 @@ package com.javamaniax.dochi.decorators;
 
 import java.util.List;
 import org.docbook.ns.docbook.Article;
+import org.docbook.ns.docbook.Para;
 import org.docbook.ns.docbook.Subtitle;
 import org.docbook.ns.docbook.Title;
 import org.docbook.ns.docbook.Xref;
@@ -48,6 +49,10 @@ public class PrintDecorator implements Decorator {
     @Override
     public void print(Subtitle subtitle) {
         println("Subtitle: "+getContent(subtitle.getContent()));
+    }
+    @Override
+    public void print(Para para) {
+       println("Para: "+getContent(para.getContent()));
     }
 
     @Override
@@ -79,6 +84,8 @@ public class PrintDecorator implements Decorator {
     public void print(Xref xref) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    
 
     
 
