@@ -24,6 +24,9 @@
 package com.javamaniax.dochi.decorators;
 
 import java.util.List;
+import org.docbook.ns.docbook.Article;
+import org.docbook.ns.docbook.Subtitle;
+import org.docbook.ns.docbook.Title;
 import org.docbook.ns.docbook.Xref;
 import org.docbook.ns.docbook.Year;
 
@@ -33,6 +36,19 @@ import org.docbook.ns.docbook.Year;
  * @author Massimo Caliman
  */
 public class PrintDecorator implements Decorator {
+
+    @Override
+    public void print(Article article) {
+
+    }
+     @Override
+    public void print(Title title) {
+        println("Title: "+getContent(title.getContent()));
+    }
+    @Override
+    public void print(Subtitle subtitle) {
+        println("Subtitle: "+getContent(subtitle.getContent()));
+    }
 
     @Override
     public void print(String string) {
@@ -46,19 +62,26 @@ public class PrintDecorator implements Decorator {
 
     @Override
     public void print(Year year) {
+        println("year:" + getContent(year.getContent()));
+    }
+
+    private StringBuilder getContent(List<Object> content) {
         StringBuilder string = new StringBuilder();
-        List<Object> content = year.getContent();
         for (Object obj : content) {
-            if(obj!=null && obj instanceof String){
+            if (obj != null && obj instanceof String) {
                 string.append(obj);
             }
         }
-        println("year:"+string);
+        return string;
     }
 
     @Override
     public void print(Xref xref) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
     
+
+   
+
 }

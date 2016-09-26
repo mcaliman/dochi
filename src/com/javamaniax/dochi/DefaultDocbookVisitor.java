@@ -1205,11 +1205,7 @@ public class DefaultDocbookVisitor implements Decorator {
     }
 
     public void visit(Title title) {
-        label("Title");
-        List<Object> list = title.getContent();
-        for (Object object : list) {
-            visitElement(object);
-        }
+        print(title);
     }
 
     /**
@@ -2581,7 +2577,7 @@ public class DefaultDocbookVisitor implements Decorator {
     }
 
     public void visit(Subtitle element) {
-        visitObjectList(element.getContent());
+        print(element);
     }
 
     public void visit(Superscript element) {
@@ -2819,6 +2815,22 @@ public class DefaultDocbookVisitor implements Decorator {
     private void visit(Year year) {
         print(year);
     }
+    
+    @Override
+    public void print(Article article) {
+        decorator.print(article);
+    }
+    
+    @Override
+    public void print(Title title) {
+        decorator.print(title);
+    }
+    @Override
+    public void print(Subtitle subtitle) {
+        decorator.print(subtitle);
+    }
+    
+    //==>
 
     @Override
     public void print(Year year) {
@@ -2829,5 +2841,11 @@ public class DefaultDocbookVisitor implements Decorator {
     public void print(Xref xref) {
         decorator.print(xref);
     }
+
+    
+
+    
+
+    
 
 }

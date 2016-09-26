@@ -23,6 +23,9 @@
  */
 package com.javamaniax.dochi.decorators;
 
+import org.docbook.ns.docbook.Article;
+import org.docbook.ns.docbook.Subtitle;
+import org.docbook.ns.docbook.Title;
 import org.docbook.ns.docbook.Xref;
 import org.docbook.ns.docbook.Year;
 
@@ -33,6 +36,16 @@ import org.docbook.ns.docbook.Year;
  */
 public class EmptyDecorator implements Decorator {
 
+    @Override
+    public void print(Article article) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+     @Override
+    public void print(Title title) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    //
+    
     @Override
     public void print(String string) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -52,5 +65,14 @@ public class EmptyDecorator implements Decorator {
     public void print(Xref xref) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public void print(Subtitle subtitle) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+   
+
+    
     
 }
