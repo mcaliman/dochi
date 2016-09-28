@@ -25,6 +25,8 @@ package com.javamaniax.dochi.decorators;
 
 import org.docbook.ns.docbook.Article;
 import org.docbook.ns.docbook.Para;
+import org.docbook.ns.docbook.Productname;
+import org.docbook.ns.docbook.Productnumber;
 import org.docbook.ns.docbook.Subtitle;
 import org.docbook.ns.docbook.Title;
 import org.docbook.ns.docbook.Xref;
@@ -49,5 +51,8 @@ public interface Decorator {
     
     public void print(Xref xref);
     public void print(Year year);
+    
+    public void visit(Productname productname);
+    public void visit(Productnumber productnumber); 
     
 }

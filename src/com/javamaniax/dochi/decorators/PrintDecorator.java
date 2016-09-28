@@ -26,6 +26,8 @@ package com.javamaniax.dochi.decorators;
 import java.util.List;
 import org.docbook.ns.docbook.Article;
 import org.docbook.ns.docbook.Para;
+import org.docbook.ns.docbook.Productname;
+import org.docbook.ns.docbook.Productnumber;
 import org.docbook.ns.docbook.Subtitle;
 import org.docbook.ns.docbook.Title;
 import org.docbook.ns.docbook.Xref;
@@ -85,10 +87,13 @@ public class PrintDecorator implements Decorator {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    
-
-    
-
-   
+    @Override
+    public void visit(Productname productname) {
+        print("Productname:"+getContent(productname.getContent()));
+    }
+    @Override
+    public void visit(Productnumber productnumber) {
+        print("Productnumber:"+getContent(productnumber.getContent()));
+    }
 
 }

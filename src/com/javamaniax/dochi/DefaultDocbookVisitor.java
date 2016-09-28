@@ -457,8 +457,6 @@ public class DefaultDocbookVisitor implements Decorator {
         }
     }
 
-
-    
 //<editor-fold defaultstate="collapsed" desc="TODO Classical example need Chain-of-responsibility pattern!!!! (next release)">
     public void visitElement(Object element) {
         if (element instanceof Abbrev) {
@@ -1185,7 +1183,7 @@ public class DefaultDocbookVisitor implements Decorator {
         }
     }
 //</editor-fold>
-    
+
     private void label(String string) {
         //System.out.println(string);
     }
@@ -1211,10 +1209,10 @@ public class DefaultDocbookVisitor implements Decorator {
     }
 
     /**
-     * 
-     * @param article 
+     *
+     * @param article
      */
-    public void visit(Article article) {        
+    public void visit(Article article) {
         visit(article.getInfo());
         visitObjectList(article.getTitlesAndTitleabbrevsAndSubtitles());
         visitObjectList(article.getGlossariesAndBibliographiesAndIndices());
@@ -1270,9 +1268,9 @@ public class DefaultDocbookVisitor implements Decorator {
         this.numberOfPara++;
         print(para);
         /*List<Object> list = para.getContent();
-        for (Object object : list) {
-            visitElement(object);
-        }*/
+         for (Object object : list) {
+         visitElement(object);
+         }*/
     }
 
     public void visit(Chapter chapter) {
@@ -2247,31 +2245,36 @@ public class DefaultDocbookVisitor implements Decorator {
     }
 
     public void visit(Productionset element) {
-        //TODO
+        element.getTitlesAndTitleabbrevs();
+        element.getProductionsAndProductionrecaps();
     }
 
-    public void visit(Productname element) {
-        //TODO
+    public void visit(Productname productname) {
+        decorator.visit(productname);
     }
 
-    public void visit(Productnumber element) {
-        //TODO
+    public void visit(Productnumber productnumber) {
+        decorator.visit(productnumber);
     }
 
     public void visit(Programlistingco element) {
-        //TODO
+        visit(element.getProgramlisting());
+        List<Calloutlist> calloutlists = element.getCalloutlists();
+        for (Calloutlist calloutlist : calloutlists) {
+            visit(calloutlist);
+        }
     }
 
     public void visit(Programlisting element) {
-        //TODO
+        element.getContent();
     }
 
     public void visit(Prompt element) {
-        //TODO
+        element.getContent();
     }
 
     public void visit(Property element) {
-        //TODO
+        element.getContent();
     }
 
     public void visit(Pubdate element) {
@@ -2279,39 +2282,66 @@ public class DefaultDocbookVisitor implements Decorator {
     }
 
     public void visit(Publisher element) {
-        //TODO
+        Publishername publishername = element.getPublishername();
+        visit(publishername);
+        List<Address> addresses = element.getAddresses();
+        for (Address address : addresses) {
+            visit(address);
+        }
     }
 
     public void visit(Publishername element) {
-        //TODO
+        element.getContent();
     }
 
     public void visit(Qandadiv element) {
-        //TODO
+        visitObjectList(element.getTitlesAndTitleabbrevs());
+        visitObjectList(element.getItemizedlistsAndOrderedlistsAndProcedures());
+        List<Qandaentry> qandaentries = element.getQandaentries();
+        for (Qandaentry qandaentry : qandaentries) {
+            visit(qandaentry);
+        }
+        List<Qandadiv> qandadivs = element.getQandadivs();
+        for (Qandadiv qandadiv : qandadivs) {
+            visit(qandadiv);
+        }
+        
     }
 
     public void visit(Qandaentry element) {
-        //TODO
+        visitObjectList(element.getTitlesAndTitleabbrevs());
+        List<Answer> answers = element.getAnswers();
+        for (Answer answer : answers) {
+            visit(answer);
+        }
     }
 
     public void visit(Qandaset element) {
-        //TODO
+        visitObjectList(element.getTitlesAndTitleabbrevs());
+        List<Qandadiv> qandadivs = element.getQandadivs();
+        for (Qandadiv qandadiv : qandadivs) {
+            visit(qandadiv);
+        }
+        List<Qandaentry> qandaentries = element.getQandaentries();
+        for (Qandaentry qandaentry : qandaentries) {
+            visit(qandaentry);
+        }
     }
 
     public void visit(Question element) {
-        //TODO
+        visitObjectList(element.getItemizedlistsAndOrderedlistsAndProcedures());        
     }
 
     public void visit(Quote element) {
-        //TODO
+        element.getContent();
     }
 
     public void visit(Refclass element) {
-        //TODO
+        element.getContent();
     }
 
     public void visit(Refdescriptor element) {
-        //TODO
+        element.getContent();
     }
 
     public void visit(Refentry element) {
@@ -2320,7 +2350,7 @@ public class DefaultDocbookVisitor implements Decorator {
     }
 
     public void visit(Refentrytitle element) {
-        //TODO
+        element.getContent();
     }
 
     public void visit(Reference element) {
@@ -2331,35 +2361,50 @@ public class DefaultDocbookVisitor implements Decorator {
     }
 
     public void visit(Refmeta element) {
-        //TODO
+        visitObjectList(element.getIndextermsAndRefentrytitlesAndManvolna());
     }
 
     public void visit(Refmiscinfo element) {
-        //TODO
+        element.getContent();
     }
 
     public void visit(Refnamediv element) {
-        //TODO
+        List<Refclass> refclasses = element.getRefclasses();
+        for (Refclass refclasse : refclasses) {
+            visit(refclasse);
+        }
+        Refdescriptor refdescriptor = element.getRefdescriptor();
+        visit(refdescriptor);
+        List<Refname> refnames = element.getRefnames();
+        for (Refname refname : refnames) {
+            visit(refname);
+        }
+        Refpurpose refpurpose = element.getRefpurpose();
+        visit(refpurpose);
+        String remap = element.getRemap();
     }
 
     public void visit(Refname element) {
-        //TODO
+        element.getContent();
     }
 
     public void visit(Refpurpose element) {
-        //TODO
+        element.getContent();
     }
 
     public void visit(Refsect1 element) {
-        //TODO
+        visitObjectList(element.getTitlesAndTitleabbrevsAndSubtitles());
+        visitObjectList(element.getItemizedlistsAndOrderedlistsAndProcedures());
     }
 
     public void visit(Refsect2 element) {
-        //TODO
+        visitObjectList(element.getTitlesAndTitleabbrevsAndSubtitles());
+        visitObjectList(element.getItemizedlistsAndOrderedlistsAndProcedures());
     }
 
     public void visit(Refsect3 element) {
-        //TODO
+        visitObjectList(element.getTitlesAndTitleabbrevsAndSubtitles());
+        visitObjectList(element.getItemizedlistsAndOrderedlistsAndProcedures());
     }
 
     public void visit(Refsection refsection) {
@@ -2369,95 +2414,194 @@ public class DefaultDocbookVisitor implements Decorator {
     }
 
     public void visit(Refsynopsisdiv element) {
-        //TODO
+        visitObjectList(element.getItemizedlistsAndOrderedlistsAndProcedures());
+        List<Refsect2> refsect2s = element.getRefsect2s();
+        for (Refsect2 refsect2 : refsect2s) {
+            visit(refsect2);
+        }
+        List<Refsection> refsections = element.getRefsections();
+        for (Refsection refsection : refsections) {
+            visit(refsection);
+        }
+        visitObjectList(element.getTitlesAndTitleabbrevsAndSubtitles());
     }
 
     public void visit(Releaseinfo element) {
-        //TODO
+        element.getContent();
     }
+    
 
     public void visit(Remark element) {
-        //TODO
+        element.getContent();
     }
 
     public void visit(Replaceable element) {
-        //TODO
+        element.getContent();
     }
 
     public void visit(Returnvalue element) {
-        //TODO
+        element.getContent();
     }
 
     public void visit(Revdescription element) {
-        //TODO
+        element.getItemizedlistsAndOrderedlistsAndProcedures();
     }
 
     public void visit(Revhistory element) {
-        //TODO
+        element.getRevisions();
+        element.getTitlesAndTitleabbrevs();
     }
 
     public void visit(Revision element) {
-        //TODO
+        visitObjectList(element.getAuthorinitialsAndAuthors());
+        visit(element.getRevdescription());
+        visit(element.getRevisionflag());
+        visit(element.getRevnumber());
+        visit(element.getRevremark());
     }
 
     public void visit(Revnumber element) {
-        //TODO
+        element.getContent();
     }
 
     public void visit(Revremark element) {
-        //TODO
+        element.getContent();
     }
 
     public void visit(Rhs element) {
-        //TODO
+        element.getContent();
     }
 
     public void visit(Row element) {
-        //TODO
+        visitObjectList(element.getEntriesAndEntrytbls());
     }
 
     public void visit(Sbr element) {
-        //TODO
+        //delegate
     }
 
     public void visit(Screenco element) {
-        //TODO
+        visit(element.getInfo());
+        List<Calloutlist> calloutlists = element.getCalloutlists();
+        for (Calloutlist calloutlist : calloutlists) {
+            visit(calloutlist);
+        }
     }
 
     public void visit(Screen element) {
-        //TODO
+        element.getContent();
     }
 
     public void visit(Screenshot element) {
-        //TODO
+        visit(element.getInfo());
+        visit(element.getMediaobject());
     }
 
     public void visit(Secondaryie element) {
-        //TODO
+        List<Object> linkends = element.getLinkends();
+        for (Object linkend : linkends) {
+            visitElement(linkend);
+        }
+        element.getContent();
     }
 
     public void visit(Secondary element) {
-        //TODO
+        element.getContent();
     }
 
     public void visit(Sect1 element) {
-        //TODO
+        List<Object> titlesAndTitleabbrevsAndSubtitles = element.getTitlesAndTitleabbrevsAndSubtitles();
+        for (Object titlesAndTitleabbrevsAndSubtitle : titlesAndTitleabbrevsAndSubtitles) {
+            visitElement(titlesAndTitleabbrevsAndSubtitle);
+        }
+        List<Object> glossariesAndBibliographiesAndIndices = element.getGlossariesAndBibliographiesAndIndices();
+        for (Object glossariesAndBibliographiesAndIndice : glossariesAndBibliographiesAndIndices) {
+            visitElement(glossariesAndBibliographiesAndIndice);
+        }
+        List<Object> itemizedlistsAndOrderedlistsAndProcedures = element.getItemizedlistsAndOrderedlistsAndProcedures();
+        for (Object itemizedlistsAndOrderedlistsAndProcedure : itemizedlistsAndOrderedlistsAndProcedures) {
+            visitElement(itemizedlistsAndOrderedlistsAndProcedure);
+        }
+        List<Simplesect> simplesects = element.getSimplesects();
+        for (Simplesect simplesect : simplesects) {
+            visit(simplesect);
+        }
     }
 
     public void visit(Sect2 element) {
-        //TODO
+        List<Object> titlesAndTitleabbrevsAndSubtitles = element.getTitlesAndTitleabbrevsAndSubtitles();
+        for (Object titlesAndTitleabbrevsAndSubtitle : titlesAndTitleabbrevsAndSubtitles) {
+            visitElement(titlesAndTitleabbrevsAndSubtitle);
+        }
+        List<Object> glossariesAndBibliographiesAndIndices = element.getGlossariesAndBibliographiesAndIndices();
+        for (Object glossariesAndBibliographiesAndIndice : glossariesAndBibliographiesAndIndices) {
+            visitElement(glossariesAndBibliographiesAndIndice);
+        }
+        List<Object> itemizedlistsAndOrderedlistsAndProcedures = element.getItemizedlistsAndOrderedlistsAndProcedures();
+        for (Object itemizedlistsAndOrderedlistsAndProcedure : itemizedlistsAndOrderedlistsAndProcedures) {
+            visitElement(itemizedlistsAndOrderedlistsAndProcedure);
+        }
+        List<Simplesect> simplesects = element.getSimplesects();
+        for (Simplesect simplesect : simplesects) {
+            visit(simplesect);
+        }
     }
 
     public void visit(Sect3 element) {
-        //TODO
+        List<Object> titlesAndTitleabbrevsAndSubtitles = element.getTitlesAndTitleabbrevsAndSubtitles();
+        for (Object titlesAndTitleabbrevsAndSubtitle : titlesAndTitleabbrevsAndSubtitles) {
+            visitElement(titlesAndTitleabbrevsAndSubtitle);
+        }
+        List<Object> glossariesAndBibliographiesAndIndices = element.getGlossariesAndBibliographiesAndIndices();
+        for (Object glossariesAndBibliographiesAndIndice : glossariesAndBibliographiesAndIndices) {
+            visitElement(glossariesAndBibliographiesAndIndice);
+        }
+        List<Object> itemizedlistsAndOrderedlistsAndProcedures = element.getItemizedlistsAndOrderedlistsAndProcedures();
+        for (Object itemizedlistsAndOrderedlistsAndProcedure : itemizedlistsAndOrderedlistsAndProcedures) {
+            visitElement(itemizedlistsAndOrderedlistsAndProcedure);
+        }
+        List<Simplesect> simplesects = element.getSimplesects();
+        for (Simplesect simplesect : simplesects) {
+            visit(simplesect);
+        }
     }
 
     public void visit(Sect4 element) {
-        //TODO
+        List<Object> titlesAndTitleabbrevsAndSubtitles = element.getTitlesAndTitleabbrevsAndSubtitles();
+        for (Object titlesAndTitleabbrevsAndSubtitle : titlesAndTitleabbrevsAndSubtitles) {
+            visitElement(titlesAndTitleabbrevsAndSubtitle);
+        }
+        List<Object> glossariesAndBibliographiesAndIndices = element.getGlossariesAndBibliographiesAndIndices();
+        for (Object glossariesAndBibliographiesAndIndice : glossariesAndBibliographiesAndIndices) {
+            visitElement(glossariesAndBibliographiesAndIndice);
+        }
+        List<Object> itemizedlistsAndOrderedlistsAndProcedures = element.getItemizedlistsAndOrderedlistsAndProcedures();
+        for (Object itemizedlistsAndOrderedlistsAndProcedure : itemizedlistsAndOrderedlistsAndProcedures) {
+            visitElement(itemizedlistsAndOrderedlistsAndProcedure);
+        }
+        List<Simplesect> simplesects = element.getSimplesects();
+        for (Simplesect simplesect : simplesects) {
+            visit(simplesect);
+        }
     }
 
     public void visit(Sect5 element) {
-        //TODO
+        List<Object> titlesAndTitleabbrevsAndSubtitles = element.getTitlesAndTitleabbrevsAndSubtitles();
+        for (Object titlesAndTitleabbrevsAndSubtitle : titlesAndTitleabbrevsAndSubtitles) {
+            visitElement(titlesAndTitleabbrevsAndSubtitle);
+        }
+        List<Object> glossariesAndBibliographiesAndIndices = element.getGlossariesAndBibliographiesAndIndices();
+        for (Object glossariesAndBibliographiesAndIndice : glossariesAndBibliographiesAndIndices) {
+            visitElement(glossariesAndBibliographiesAndIndice);
+        }
+        List<Object> itemizedlistsAndOrderedlistsAndProcedures = element.getItemizedlistsAndOrderedlistsAndProcedures();
+        for (Object itemizedlistsAndOrderedlistsAndProcedure : itemizedlistsAndOrderedlistsAndProcedures) {
+            visitElement(itemizedlistsAndOrderedlistsAndProcedure);
+        }
+        List<Simplesect> simplesects = element.getSimplesects();
+        for (Simplesect simplesect : simplesects) {
+            visit(simplesect);
+        }
     }
 
     public void visit(Section element) {
@@ -2480,38 +2624,59 @@ public class DefaultDocbookVisitor implements Decorator {
 
     public void visit(Seealsoie element) {
         //TODO
+        element.getLinkends();
+        element.getContent();
     }
 
     public void visit(Seealso element) {
         //TODO
+        element.getContent();
     }
 
     public void visit(Seeie element) {
         //TODO
+        element.getContent();
     }
 
     public void visit(See element) {
         //TODO
+        element.getContent();
     }
 
     public void visit(Seg element) {
         //TODO
+        element.getContent();
     }
 
     public void visit(Seglistitem element) {
-        //TODO
+        List<Seg> segs = element.getSegs();
+        for (Seg seg : segs) {
+            visit(seg);
+        }
     }
 
     public void visit(Segmentedlist element) {
-        //TODO
+        List<Object> titlesAndTitleabbrevs = element.getTitlesAndTitleabbrevs();
+        for (Object titlesAndTitleabbrev : titlesAndTitleabbrevs) {
+            visitElement(titlesAndTitleabbrev);
+        }
+        List<Segtitle> segtitles = element.getSegtitles();
+        for (Segtitle segtitle : segtitles) {
+            visit(segtitle);
+        }
+        List<Seglistitem> seglistitems = element.getSeglistitems();
+        for (Seglistitem seglistitem : seglistitems) {
+            visit(seglistitem);
+        }
     }
 
     public void visit(Segtitle element) {
         //TODO
+        element.getContent();
     }
 
     public void visit(Seriesvolnums element) {
-        //TODO
+        element.getContent();
     }
 
     public void visit(Setindex element) {
@@ -2545,7 +2710,7 @@ public class DefaultDocbookVisitor implements Decorator {
         //TODO
         visitObjectList(element.getItemizedlistsAndOrderedlistsAndProcedures());
         visitObjectList(element.getTitlesAndTitleabbrevs());
-        
+
     }
 
     public void visit(Simpara element) {
@@ -2569,7 +2734,7 @@ public class DefaultDocbookVisitor implements Decorator {
     public void visit(Simplesect element) {
         visitObjectList(element.getItemizedlistsAndOrderedlistsAndProcedures());
         visitObjectList(element.getTitlesAndTitleabbrevsAndSubtitles());
-        
+
     }
 
     public void visit(Spanspec element) {
@@ -2628,7 +2793,7 @@ public class DefaultDocbookVisitor implements Decorator {
         //TODO
         List<Step> steps = element.getSteps();
         for (Step step : steps) {
-           visit(step);  
+            visit(step);
         }
     }
 
@@ -2654,7 +2819,7 @@ public class DefaultDocbookVisitor implements Decorator {
     public void visit(Synopfragment element) {
         //TODO
         visitObjectList(element.getArgsAndGroups());
-        
+
     }
 
     public void visit(Synopfragmentref element) {
@@ -2665,7 +2830,7 @@ public class DefaultDocbookVisitor implements Decorator {
     public void visit(Synopsis element) {
         //TODO decorator
         element.getContent();
-        
+
     }
 
     public void visit(Systemitem element) {
@@ -2854,7 +3019,7 @@ public class DefaultDocbookVisitor implements Decorator {
         for (Term term : terms) {
             visit(term);
         }
-                
+
     }
 
     public void visit(Varname element) {
@@ -2870,7 +3035,7 @@ public class DefaultDocbookVisitor implements Decorator {
     }
 
     public void visit(Void element) {
-         //Empty      
+        //Empty      
     }
 
     public void visit(Volumenum element) {
@@ -2895,38 +3060,29 @@ public class DefaultDocbookVisitor implements Decorator {
     }
 
 //<editor-fold defaultstate="collapsed" desc="visit() methods">
-    
 //</editor-fold>
-    
-    
-    
     @Override
     public void print(Article article) {
         decorator.print(article);
     }
-    
+
     @Override
     public void print(Title title) {
         decorator.print(title);
     }
+
     @Override
     public void print(Subtitle subtitle) {
         decorator.print(subtitle);
     }
-    
+
     @Override
     public void print(Para para) {
         decorator.print(para);
     }
-    
+
     //==>
-
-    
-
 //<editor-fold defaultstate="collapsed" desc="print() decorator methods">
-    
-    
-    
     @Override
     public void print(Year year) {
         decorator.print(year);
@@ -2938,6 +3094,4 @@ public class DefaultDocbookVisitor implements Decorator {
     }
 //</editor-fold>
 
-   
-    
 }

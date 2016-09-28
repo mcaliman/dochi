@@ -25,6 +25,8 @@ package com.javamaniax.dochi.decorators;
 
 import org.docbook.ns.docbook.Article;
 import org.docbook.ns.docbook.Para;
+import org.docbook.ns.docbook.Productname;
+import org.docbook.ns.docbook.Productnumber;
 import org.docbook.ns.docbook.Subtitle;
 import org.docbook.ns.docbook.Title;
 import org.docbook.ns.docbook.Xref;
@@ -74,6 +76,16 @@ public class EmptyDecorator implements Decorator {
 
     @Override
     public void print(Subtitle subtitle) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void visit(Productnumber element) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void visit(Productname productname) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
