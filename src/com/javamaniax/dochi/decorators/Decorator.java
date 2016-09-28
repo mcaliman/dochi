@@ -45,7 +45,7 @@ public interface Decorator {
     
     public void print(Para para);
     
-    //
+    //beginCapter,endChapter
     
     public void print(Xref xref);
     public void print(Year year);

@@ -2516,34 +2516,54 @@ public class DefaultDocbookVisitor implements Decorator {
 
     public void visit(Setindex element) {
         //TODO
+        element.getIndexdivs();
+        element.getIndexentries();
+        element.getInfo();
+        visitObjectList(element.getItemizedlistsAndOrderedlistsAndProcedures());
     }
 
     public void visit(Set element) {
         //TODO
+        List<Object> setsAndBooks = element.getSetsAndBooks();
+        Setindex setindex = element.getSetindex();
+        List<Object> titlesAndTitleabbrevsAndSubtitles = element.getTitlesAndTitleabbrevsAndSubtitles();
+        Toc toc = element.getToc();
     }
 
     public void visit(Shortaffil element) {
         //TODO
+        element.getContent();
     }
 
     public void visit(Shortcut element) {
         //TODO
+        List<Object> keycapsAndKeycombosAndKeysyms = element.getKeycapsAndKeycombosAndKeysyms();
+        visitObjectList(keycapsAndKeycombosAndKeysyms);
     }
 
     public void visit(Sidebar element) {
         //TODO
+        visitObjectList(element.getItemizedlistsAndOrderedlistsAndProcedures());
+        visitObjectList(element.getTitlesAndTitleabbrevs());
+        
     }
 
     public void visit(Simpara element) {
         //TODO
+        element.getContent();
     }
 
     public void visit(Simplelist element) {
         //TODO
+        List<Member> members = element.getMembers();
+        for (Member member : members) {
+            visit(member);
+        }
     }
 
     public void visit(Simplemsgentry element) {
         //TODO
+        //decorator
     }
 
     public void visit(Simplesect element) {
@@ -2554,18 +2574,26 @@ public class DefaultDocbookVisitor implements Decorator {
 
     public void visit(Spanspec element) {
         //TODO
+        element.getSpanname();
     }
 
     public void visit(State element) {
         //TODO
+        element.getContent();
     }
 
     public void visit(Stepalternatives element) {
-        //TODO
+        //TODO        
+        List<Step> steps = element.getSteps();
+        for (Step step : steps) {
+            visit(step);
+        }
     }
 
     public void visit(Step element) {
         //TODO
+        visitObjectList(element.getItemizedlistsAndOrderedlistsAndProcedures());
+        visitObjectList(element.getTitlesAndTitleabbrevs());
     }
 
     public void visit(Street element) {
@@ -2581,18 +2609,27 @@ public class DefaultDocbookVisitor implements Decorator {
 
     public void visit(Subjectset element) {
         //TODO
+        List<Subject> subjects = element.getSubjects();
+        for (Subject subject : subjects) {
+            visit(subject);
+        }
     }
 
     public void visit(Subjectterm element) {
         //TODO
+        element.getContent();
     }
 
     public void visit(Subscript element) {
-        //TODO
+        element.getContent();
     }
 
     public void visit(Substeps element) {
         //TODO
+        List<Step> steps = element.getSteps();
+        for (Step step : steps) {
+           visit(step);  
+        }
     }
 
     public void visit(Subtitle element) {
@@ -2601,6 +2638,7 @@ public class DefaultDocbookVisitor implements Decorator {
 
     public void visit(Superscript element) {
         //TODO
+        element.getContent();
     }
 
     public void visit(Surname element) {
@@ -2610,22 +2648,28 @@ public class DefaultDocbookVisitor implements Decorator {
 
     public void visit(Symbol element) {
         //TODO
+        element.getContent();
     }
 
     public void visit(Synopfragment element) {
         //TODO
+        visitObjectList(element.getArgsAndGroups());
+        
     }
 
     public void visit(Synopfragmentref element) {
-        //TODO
+        //TODO 
+        element.getContent();
     }
 
     public void visit(Synopsis element) {
-        //TODO
+        //TODO decorator
+        element.getContent();
+        
     }
 
     public void visit(Systemitem element) {
-        element.getContent();
+        //decorator element.getContent();
     }
 
     public void visit(Table element) {
@@ -2703,19 +2747,24 @@ public class DefaultDocbookVisitor implements Decorator {
     }
 
     public void visit(Textdata element) {
-
+        //delegate to decorator
     }
 
     public void visit(Textobject element) {
         //TODO
+        visitObjectList(element.getItemizedlistsAndOrderedlistsAndProcedures());
+        visit(element.getTextdata());
     }
 
     public void visit(Tfoot element) {
-        //TODO
+        //TODO delegate to decorator
     }
 
     public void visit(Tgroup element) {
-        //TODO
+        element.getColspecs();
+        element.getColsep();
+        element.getCols();
+        //TODO delegate to decorator
     }
 
     public void visit(Thead element) {
@@ -2787,35 +2836,45 @@ public class DefaultDocbookVisitor implements Decorator {
     }
 
     public void visit(Varargs element) {
-
+        //TODO delegate to decorator
     }
 
     public void visit(Variablelist element) {
-        //TODO
+        visitObjectList(element.getItemizedlistsAndOrderedlistsAndProcedures());
+        visitObjectList(element.getTitlesAndTitleabbrevs());
+        List<Varlistentry> varlistentries = element.getVarlistentries();
+        for (Varlistentry varlistentry : varlistentries) {
+            visit(varlistentry);
+        }
     }
 
     public void visit(Varlistentry element) {
-        //TODO
+        visit(element.getListitem());
+        List<Term> terms = element.getTerms();
+        for (Term term : terms) {
+            visit(term);
+        }
+                
     }
 
     public void visit(Varname element) {
-        //TODO
+        visitObjectList(element.getContent());
     }
 
     public void visit(Videodata element) {
-        //TODO
+        //many properties -> decorator
     }
 
     public void visit(Videoobject element) {
-        //TODO
+        visit(element.getVideodata());
     }
 
     public void visit(Void element) {
-        //this is a void element.        
+         //Empty      
     }
 
     public void visit(Volumenum element) {
-        //TODO
+        visitObjectList(element.getContent());
     }
 
     public void visit(Warning element) {
