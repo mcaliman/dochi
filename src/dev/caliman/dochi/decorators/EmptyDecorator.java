@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
-package com.javamaniax.dochi.decorators;
+package dev.caliman.dochi.decorators;
 
 import org.docbook.ns.docbook.Article;
 import org.docbook.ns.docbook.Para;

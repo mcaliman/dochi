@@ -21,9 +21,9 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
-package com.javamaniax.dochi;
+package dev.caliman.dochi;
 
-import com.javamaniax.dochi.decorators.Decorator;
+import dev.caliman.dochi.decorators.Decorator;
 import java.io.File;
 import java.util.List;
 import java.util.logging.Level;
